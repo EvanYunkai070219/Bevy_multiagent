@@ -1,0 +1,89 @@
+{
+  "id": "self-healing-demo",
+  "version": 1,
+  "contracts": [
+    {
+      "contractKey": "demo-producer",
+      "allowedInputs": ["src/app.ts"],
+      "allowedOutputs": ["src/app.ts"],
+      "allowedMutationPaths": ["src/app.ts"],
+      "protectedPaths": [".launchpad", "package.json"],
+      "artifactSchemaIds": ["demo-schema"],
+      "targetedGateIds": ["targeted"],
+      "contractGateIds": ["contract"],
+      "consumerGateIds": ["consumer"],
+      "regressionGateIds": ["regression"],
+      "authorizedTools": ["read_file"]
+    }
+  ],
+  "gates": [
+    {
+      "id": "targeted",
+      "tier": "targeted",
+      "command": ["node", "gates/targeted.mjs"],
+      "assetIds": ["targeted-gate", "helper"],
+      "critical": true,
+      "enabled": true
+    },
+    {
+      "id": "contract",
+      "tier": "contract",
+      "command": ["node", "gates/contract.mjs"],
+      "assetIds": ["contract-gate"],
+      "critical": true,
+      "enabled": true
+    },
+    {
+      "id": "consumer",
+      "tier": "consumer",
+      "command": ["node", "gates/consumer.mjs"],
+      "assetIds": ["consumer-gate"],
+      "critical": true,
+      "enabled": true
+    },
+    {
+      "id": "held-out",
+      "tier": "held_out",
+      "command": ["node", "gates/held-out.mjs"],
+      "assetIds": ["held-out-gate", "fixture"],
+      "critical": true,
+      "enabled": true
+    },
+    {
+      "id": "regression",
+      "tier": "regression",
+      "command": ["node", "gates/regression.mjs"],
+      "assetIds": ["regression-gate"],
+      "critical": true,
+      "enabled": true
+    },
+    {
+      "id": "post-integration",
+      "tier": "post_integration",
+      "command": ["node", "gates/regression.mjs"],
+      "assetIds": ["regression-gate"],
+      "critical": true,
+      "enabled": true
+    }
+  ],
+  "mutants": [
+    {
+      "id": "required-field",
+      "category": "schema",
+      "command": ["node", "mutants/required-field.mjs"],
+      "assetIds": ["required-field-mutant"],
+      "critical": true,
+      "enabled": true
+    }
+  ],
+  "assets": [
+    { "id": "targeted-gate", "relativePath": "gates/targeted.mjs" },
+    { "id": "contract-gate", "relativePath": "gates/contract.mjs" },
+    { "id": "consumer-gate", "relativePath": "gates/consumer.mjs" },
+    { "id": "held-out-gate", "relativePath": "gates/held-out.mjs" },
+    { "id": "regression-gate", "relativePath": "gates/regression.mjs" },
+    { "id": "required-field-mutant", "relativePath": "mutants/required-field.mjs" },
+    { "id": "helper", "relativePath": "helpers/lib.mjs" },
+    { "id": "fixture", "relativePath": "fixtures/held.json" }
+  ]
+}

@@ -1,0 +1,6037 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #2b2f33;
+  background: #fffbf7;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  /* Ink is a deep blue-green rather than near-black: everything on screen is
+     outlined now, and true black outlines read as harsh against a warm ground. */
+  --ink: #2b2f33;
+  --ink-soft: #5c6266;
+  --muted: #8c9296;
+  --line: #cddad8;
+  /* Outlines are the single biggest gap against the reference: it draws an edge
+     on nearly every element, and measured across four zones its dark-ink area
+     was more than double this build's. This is the colour those edges use. */
+  --edge: #b3c9c6;
+  --edge-strong: #6f8f92;
+  --canvas: #fffbf7;
+  --paper: #ffffff;
+
+  /* The navigation and the chat list sit on a pale teal, so the warm white
+     working area reads as the surface you are actually on. */
+  /* The chat list is warm white -- measured off the reference at #fcfcf4. It
+     was tinted teal here, which spent the accent on a whole column of
+     background and left nothing for the things that are actually active. Only
+     the narrow nav rail carries a tint, and even that is nearly white. */
+  --shell: #fcfcf4;
+  --shell-deep: #f7f7ec;
+  --shell-raised: #fbfbf2;
+  --shell-raised-strong: #f0f2e6;
+  --shell-line: #dfe3d2;
+  --nav-shell: #f0fbf7;
+  --shell-ink: var(--ink);
+  --shell-muted: #8c9296;
+
+  /* One accent, spent only where something is genuinely active or primary. */
+  --accent: #70c8c0;
+  --accent-dark: #2f8f86;
+  --accent-soft: #e8f8f4;
+  --accent-line: #a8ddd6;
+
+  --green: #3f9160;
+  --amber: #c08a30;
+  --red: #d0685e;
+  --blue: #4483b5;
+
+  /* Every card in the rail carries its own colour: a wall of identical white
+     panels is the thing that made this read as a dashboard. Each is a pale
+     ground, a matching outline, and a heading dark enough to stay legible. */
+  --card-agent-bg: #f3faf4;
+  --card-agent-line: #c4e0c9;
+  --card-agent-ink: #2f7c50;
+  --card-moves-bg: #f0f8fd;
+  --card-moves-line: #c0dcef;
+  --card-moves-ink: #3a6f9c;
+  --card-move-bg: #fdf2f2;
+  --card-move-line: #f1cdcd;
+  --card-move-ink: #bd5a68;
+  --card-talk-bg: #f6f4fd;
+  --card-talk-line: #d8d1f0;
+  --card-talk-ink: #6a5aa8;
+  --card-files-bg: #f2f9fb;
+  --card-files-line: #c2dfe6;
+  --card-files-ink: #35798c;
+  --card-phase-bg: #fffaef;
+  --card-phase-line: #eedfba;
+  --card-phase-ink: #a1762e;
+
+  /* Role tints. Low saturation on purpose: they label, they do not shout. */
+  --tint-code: #e8f8f4;
+  --tint-code-ink: #2f8f86;
+  --tint-research: #e4f0f7;
+  --tint-research-ink: #2a6d96;
+  --tint-ops: #fdeee0;
+  --tint-ops-ink: #a9631c;
+  --tint-review: #e9f4ec;
+  --tint-review-ink: #2f7c50;
+
+  --radius: 6px;
+  --radius-sm: 4px;
+  --radius-xs: 3px;
+  /* Hard edges rather than a glow: a hairline and a short, unblurred drop. */
+  --shadow: 0 1px 0 rgba(36, 64, 74, 0.04);
+  --shadow-sm: none;
+}
+
+.evolution-panel {
+  margin: 18px 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(251, 250, 247, 0.9);
+}
+
+.evolution-panel--severe,
+.evolution-panel--quarantined {
+  border-left: 3px solid var(--red);
+}
+
+.evolution-heading,
+.evolution-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.evolution-heading > div {
+  display: grid;
+  gap: 5px;
+}
+
+.evolution-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.evolution-heading strong,
+.evolution-fault,
+.evolution-sync,
+.evolution-terminal,
+.evolution-warning {
+  margin: 0;
+  font-size: 12px;
+}
+
+.evolution-status,
+.evolution-node-state,
+.evolution-edge,
+.evolution-historical {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 7px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.evolution-fault,
+.evolution-warning,
+.evolution-sync,
+.evolution-terminal {
+  margin-top: 10px;
+}
+
+.evolution-warning--severe {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.evolution-meta {
+  justify-content: flex-start;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.evolution-details {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.evolution-details summary {
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.evolution-tree {
+  display: grid;
+  gap: 7px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evolution-tree li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.evolution-node-label {
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.evolution-historical {
+  color: var(--purple-dark);
+  background: var(--purple-soft);
+}
+
+.evolution-empty {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.evolution-more {
+  margin-top: 12px;
+}
+
+.evolution-branch-history {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.evolution-branch-history__toggle {
+  min-height: 34px;
+  padding-inline: 11px;
+}
+
+.evolution-branch-history__toggle span {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.evolution-branch-history__body {
+  margin-top: 10px;
+}
+
+.evolution-branch-history__advisory {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.evolution-branch-history__lineage {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evolution-branch-history__graph {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.evolution-branch-history__tracks {
+  align-items: stretch;
+}
+
+.evolution-branch-history__row {
+  min-width: 0;
+}
+
+.evolution-branch-history__node {
+  width: 100%;
+  min-height: 56px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  align-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  text-align: left;
+  cursor: pointer;
+}
+
+.evolution-branch-history__node:hover,
+.evolution-branch-history__node[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.evolution-branch-history__toggle:focus-visible,
+.evolution-branch-history__node:focus-visible {
+  outline: 2px solid var(--accent-dark);
+  outline-offset: 2px;
+}
+
+.evolution-branch-history__connectors {
+  display: grid;
+  gap: 10px;
+  margin: 7px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evolution-branch-history__connector {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  min-width: 0;
+  padding-top: 8px;
+}
+
+.evolution-branch-history__connector-line {
+  position: absolute;
+  inset: 0 8px auto;
+  height: 6px;
+  border-top: 1px solid var(--accent-line);
+}
+
+.evolution-branch-history__connector-line::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  right: -1px;
+  width: 5px;
+  height: 5px;
+  border-top: 1px solid var(--accent-dark);
+  border-right: 1px solid var(--accent-dark);
+  transform: rotate(45deg);
+}
+
+.evolution-branch-history__connector[data-lineage-direction="return"] .evolution-branch-history__connector-line::after {
+  right: auto;
+  left: -1px;
+  transform: rotate(-135deg);
+}
+
+.evolution-branch-history__selection {
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px;
+  background: var(--shell-raised);
+}
+
+.evolution-branch-history__selection h4,
+.evolution-branch-history__selection p {
+  margin: 0;
+  font-size: 11px;
+}
+
+.evolution-branch-history__selection p {
+  margin-top: 10px;
+  color: var(--ink-soft);
+}
+
+.evolution-branch-history__selection dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px 12px;
+  margin: 10px 0 0;
+}
+
+.evolution-branch-history__selection dl > div {
+  min-width: 0;
+}
+
+.evolution-branch-history__selection dt {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.evolution-branch-history__selection dd {
+  margin: 3px 0 0;
+  font-size: 11px;
+}
+
+.evolution-branch-history__evidence {
+  margin-top: 10px;
+  font-size: 10px;
+}
+
+.evolution-branch-history__evidence ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 5px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evolution-branch-history__evidence code {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 680px) {
+  .evolution-branch-history__lineage--vertical-narrow {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 8px;
+    border-inline-start: 1px solid var(--accent-line);
+    padding-inline-start: 10px;
+    min-width: 0 !important;
+  }
+
+  .evolution-branch-history__lineage--vertical-narrow .evolution-branch-history__row {
+    grid-column: 1 !important;
+  }
+
+  .evolution-branch-history__connectors {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) !important;
+    min-width: 0 !important;
+    border-inline-start: 1px solid var(--accent-line);
+    padding-inline-start: 10px;
+  }
+
+  .evolution-branch-history__connector {
+    grid-column: 1 !important;
+    justify-items: start;
+    padding-top: 0;
+  }
+
+  .evolution-branch-history__connector-line {
+    display: none;
+  }
+
+  .evolution-branch-history__selection dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.auth-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(circle at top, #f0edff, #f2f1ed 45%);
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  padding: 34px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.auth-card h1 {
+  margin: 12px 0 8px;
+  font-size: 28px;
+}
+
+.auth-card p {
+  margin: 0 0 24px;
+  color: var(--muted);
+}
+
+.auth-card label,
+.auth-card input,
+.auth-card button {
+  width: 100%;
+}
+
+.auth-card label {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.auth-card input {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 0 12px;
+}
+
+select {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0 12px;
+  background: white;
+  color: var(--ink);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 284px minmax(0, 1fr);
+  background: var(--canvas);
+}
+
+/* Destinations, then the list belonging to the chosen one, then the page. */
+.app-shell--with-nav {
+  grid-template-columns: 72px 284px minmax(0, 1fr);
+}
+
+.app-shell--with-nav.app-shell--with-rail {
+  grid-template-columns: 72px 284px minmax(0, 1fr) 272px;
+}
+
+.rail {
+  min-width: 0;
+  /* The rail scrolls by itself. As ordinary page flow its content stretched
+     the body, so wheeling over the rail scrolled the conversation with it —
+     the one column a reader wants to move independently was the one that
+     could not. Pinned to the viewport with its own scrollbar, and its scroll
+     does not chain into the page when it runs out. */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overscroll-behavior: contain;
+  padding: 20px 18px 28px;
+  border-left: none;
+  background: var(--canvas);
+  overflow-y: auto;
+}
+
+/* Below this width three columns squeeze the conversation, so the plan drops
+   under the main area instead. */
+@media (max-width: 1200px) {
+  .app-shell--with-nav.app-shell--with-rail {
+    grid-template-columns: 72px 276px minmax(0, 1fr);
+  }
+
+  .rail {
+    grid-column: 3;
+    /* Stacked under the main column the rail is page flow again: a pinned
+       full-height panel down there would cover the content above it. */
+    position: static;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid rgba(17, 17, 17, 0.08);
+  }
+}
+
+.sidebar {
+  height: 100vh;
+  min-height: 0;
+  padding: 20px 14px;
+  background: var(--shell);
+  color: var(--shell-ink);
+  display: flex;
+  flex-direction: column;
+  border-right: none;
+  overflow: hidden;
+  position: sticky;
+  top: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 2px 6px 24px;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  font-weight: 700;
+  background: linear-gradient(145deg, #8d7cf1, #5a43c9);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 8px 24px rgba(83, 61, 187, 0.36);
+}
+
+.brand strong,
+.brand span {
+  display: block;
+}
+
+.brand strong {
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.brand span {
+  color: #96968f;
+  font-size: 10px;
+  margin-top: 3px;
+}
+
+.button {
+  border: 0;
+  border-radius: 10px;
+  min-height: 38px;
+  padding: 0 15px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 160ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-primary {
+  color: white;
+  background: var(--accent);
+  box-shadow: 0 7px 18px rgba(86, 64, 194, 0.22);
+}
+
+.button-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--accent-dark);
+}
+
+.button-ghost {
+  background: #f0efea;
+  color: #464741;
+}
+
+.button-ghost:hover:not(:disabled) {
+  background: #e4e2da;
+}
+
+.button-danger {
+  background: #f7e9e7;
+  color: #ae4646;
+}
+
+.button-danger:hover:not(:disabled) {
+  background: #f1d9d6;
+}
+
+.create-button {
+  width: 100%;
+  justify-content: flex-start;
+  min-height: 44px;
+  padding-left: 16px;
+  background: #6b56db;
+}
+
+.create-button span {
+  font-size: 19px;
+  font-weight: 400;
+}
+
+.sidebar-label {
+  display: flex;
+  justify-content: space-between;
+  padding: 25px 7px 10px;
+  color: #85857e;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.agent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #4a4a44 transparent;
+}
+
+.agent-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.agent-card {
+  width: 100%;
+  border: 1px solid transparent;
+  background: var(--shell-raised);
+  padding: 8px 10px 9px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+  gap: 5px;
+  cursor: pointer;
+  transition: 150ms ease;
+}
+
+.agent-card:hover {
+  background: #2e2e2a;
+}
+
+.agent-card.selected {
+  background: #353430;
+  border-color: #464540;
+  box-shadow: inset 3px 0 #826ff0;
+}
+
+.worker-toggle {
+  width: calc(100% - 17px);
+  min-height: 24px;
+  margin-left: 17px;
+  border: 0;
+  border-left: 1px solid #3f3f3a;
+  background: transparent;
+  color: #8e8e87;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.worker-toggle:hover {
+  color: #d3d1c8;
+}
+
+.worker-toggle span {
+  width: 10px;
+  color: #a99be9;
+}
+
+.worker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-left: 17px;
+  padding-left: 9px;
+  border-left: 1px solid #3f3f3a;
+}
+
+.worker-card {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) 8px;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.worker-card:hover {
+  background: #2e2e2a;
+}
+
+.worker-card.selected {
+  background: #322f3e;
+  border-color: #4c4569;
+}
+
+.agent-avatar {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: #dcd4ff;
+  background: #4a415f;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.worker-avatar {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  color: #cabfff;
+  background: #37314a;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.agent-card-copy {
+  min-width: 0;
+}
+
+.agent-card-copy strong,
+.agent-card-copy span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.agent-card-copy strong {
+  font-size: 13.5px;
+  color: #edebe4;
+}
+
+.agent-card-copy span {
+  font-size: 11px;
+  color: #8e8e87;
+  margin-top: 2px;
+}
+
+/* The name and its status dot share one row. The generic span rule above
+   stacks and clips everything it touches, which is exactly how the dot ended
+   up half-rendered on its own line. */
+.agent-card-copy .agent-card-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  margin-top: 0;
+  overflow: visible;
+}
+
+.agent-card-copy .agent-card-title strong {
+  min-width: 0;
+}
+
+.role-pill {
+  border: 1px solid #57564f;
+  border-radius: 999px;
+  padding: 3px 6px;
+  color: #bdbbb2;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.mini-dot,
+.status-dot {
+  border-radius: 999px;
+}
+
+.mini-dot {
+  width: 7px;
+  height: 7px;
+  background: #7a7a73;
+}
+
+.mini-ready,
+.mini-busy {
+  background: #5fc99e;
+}
+
+.mini-busy {
+  animation: pulse 1.2s infinite;
+}
+
+.mini-error {
+  background: #e47b72;
+}
+
+.empty-sidebar {
+  color: #777770;
+  font-size: 12px;
+  text-align: center;
+  border: 1px dashed #42423d;
+  border-radius: 12px;
+  padding: 24px 12px;
+}
+
+.empty-sidebar span {
+  display: block;
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.sidebar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-secondary {
+  width: 100%;
+  justify-content: flex-start;
+  min-height: 36px;
+  background: #353530;
+  color: #d8d6ce;
+}
+
+.sidebar-secondary:hover:not(:disabled) {
+  background: #3f3f39;
+}
+
+.project-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.project-heading {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 2px 2px 0;
+}
+
+.project-toggle {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: #edebe4;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 4px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.project-toggle span {
+  width: 10px;
+  color: #a99be9;
+  flex-shrink: 0;
+}
+
+.project-toggle strong {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-new-chat {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #bdbbb2;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.project-new-chat:hover {
+  background: #2e2e2a;
+  color: #edebe4;
+}
+
+.project-chats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 12px;
+}
+
+.empty-project-chats {
+  color: #777770;
+  font-size: 11px;
+  padding: 6px 8px;
+}
+
+.nested-label {
+  padding-top: 14px;
+}
+
+.unassigned-group {
+  margin-top: 4px;
+}
+
+.runtime-card {
+  margin-top: auto;
+  border: 1px solid #3d3d38;
+  border-radius: 12px;
+  padding: 13px;
+  background: #292925;
+  flex-shrink: 0;
+}
+
+.runtime-card strong,
+.runtime-card > span:last-child {
+  display: block;
+}
+
+.runtime-card strong {
+  font-size: 11px;
+  margin: 6px 0 4px;
+}
+
+.runtime-card > span:last-child {
+  color: #85857e;
+  font-size: 9px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.eyebrow {
+  color: #898982;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.main {
+  min-width: 0;
+  min-height: 100vh;
+  padding: 22px 34px 34px;
+  background:
+    radial-gradient(circle at 86% -10%, rgba(105, 84, 217, 0.09), transparent 30%),
+    #f2f1ed;
+}
+
+.config-banner,
+.error-banner {
+  max-width: 1180px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  padding: 10px 13px;
+  font-size: 12px;
+}
+
+.config-banner {
+  gap: 10px;
+  color: #6c541b;
+  background: #fff7d8;
+  border: 1px solid #eddda1;
+}
+
+.config-banner > span {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  color: white;
+  font-weight: 700;
+  background: #bc9239;
+}
+
+.config-banner strong,
+.config-banner p {
+  display: block;
+  margin: 0;
+}
+
+.config-banner p {
+  font-size: 10px;
+  margin-top: 2px;
+  opacity: 0.78;
+}
+
+.error-banner {
+  justify-content: space-between;
+  color: #a13f3f;
+  background: #fae8e6;
+  border: 1px solid #edc4c0;
+}
+
+.error-banner button {
+  border: 0;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.agent-header {
+  max-width: 1180px;
+  margin: 0 auto 18px;
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.agent-header h1,
+.playground h2,
+.settings-panel h2,
+.modal h2,
+.no-agent h1 {
+  font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  letter-spacing: -0.035em;
+}
+
+.header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.agent-header h1 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.agent-header p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* Four controls now, not three: opening the panel joined them. Each gives up a
+   little room so the row stays a row rather than crowding the chat's name. */
+.header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.header-actions .button {
+  min-height: 32px;
+  padding: 0 11px;
+  font-size: 12px;
+}
+
+/* A view control, not an action: it reports a state, so it shows one. */
+.header-actions .button-on {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.status {
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  background: #e5e4df;
+  color: #666760;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+}
+
+.status-ready {
+  color: #277756;
+  background: #dcf2e9;
+}
+
+.status-busy {
+  color: #5640bc;
+  background: #e8e4fb;
+}
+
+.status-error {
+  color: #ac4343;
+  background: #f6dfdc;
+}
+
+.settings-panel,
+.playground {
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: 0 12px 36px rgba(43, 42, 38, 0.06);
+}
+
+.settings-panel {
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 14px;
+}
+
+.settings-title,
+.modal-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.settings-title h2 {
+  font-size: 16px;
+  margin: 3px 0 14px;
+}
+
+.settings-title button,
+.modal-heading button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: #898a83;
+  font-size: 22px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+}
+
+label {
+  display: block;
+  color: #575851;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid #d9d7cf;
+  background: white;
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  outline: none;
+  transition: 150ms ease;
+}
+
+input {
+  height: 40px;
+  padding: 0 12px;
+  margin-top: 6px;
+}
+
+textarea {
+  resize: vertical;
+  padding: 11px 12px;
+  margin-top: 6px;
+  line-height: 1.55;
+}
+
+/* One accent, and this was the last place still spending the old violet one. */
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(112, 200, 192, 0.22);
+}
+
+.settings-panel > label {
+  margin-top: 13px;
+}
+
+.panel-footer {
+  margin-top: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.panel-footer code {
+  font-size: 9px;
+  color: #8a8a83;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playground {
+  height: calc(100vh - 150px);
+  min-height: 560px;
+  border-radius: 17px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.playground-topbar {
+  min-height: 70px;
+  padding: 17px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e3dc;
+  background: rgba(251, 250, 247, 0.94);
+}
+
+.playground h2 {
+  margin: 3px 0 0;
+  font-size: 16px;
+}
+
+.playground-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Its own chip rather than a segment of the session pill: this number changes
+   while a Run is going, and the session state does not. */
+.usage-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #e0ded6;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: #57544d;
+  white-space: nowrap;
+}
+
+.usage-badge span + span {
+  padding-left: 8px;
+  border-left: 1px solid #e0ded6;
+  color: #8a857c;
+}
+
+.session-info {
+  color: #777870;
+  font-size: 11px;
+  border: 1px solid #e0ded6;
+  border-radius: 999px;
+  padding: 5px 9px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pulse {
+  width: 6px;
+  height: 6px;
+  background: #54b98e;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(84, 185, 142, 0.13);
+}
+
+.messages {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 28px max(28px, calc((100% - 760px) / 2));
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.52)),
+    radial-gradient(circle at 20% 0, #f1effb, transparent 38%);
+}
+
+.welcome {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 25px 0 50px;
+}
+
+.welcome-orbit {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid #d9d3f4;
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.welcome-orbit::before,
+.welcome-orbit::after {
+  content: "";
+  position: absolute;
+  border: 1px solid #e6e2f7;
+  border-radius: 50%;
+}
+
+.welcome-orbit::before {
+  width: 54px;
+  height: 54px;
+}
+
+.welcome-orbit::after {
+  width: 5px;
+  height: 5px;
+  background: #7e68e6;
+  top: 8px;
+  right: 13px;
+  box-shadow: -52px 35px 0 #bcaef2;
+}
+
+.welcome-orbit div {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  color: white;
+  background: linear-gradient(145deg, #8f7af0, #644ed0);
+  font-size: 22px;
+}
+
+.welcome h3 {
+  font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  font-size: 20px;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.welcome > p {
+  max-width: 470px;
+  color: #81827b;
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 8px 0 20px;
+}
+
+.prompt-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.prompt-grid button {
+  min-height: 86px;
+  border: 1px solid #e0ded6;
+  border-radius: 11px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  text-align: left;
+  color: #65665f;
+  font-size: 10px;
+  line-height: 1.45;
+  cursor: pointer;
+  transition: 150ms ease;
+}
+
+.prompt-grid button:hover {
+  border-color: #a99be9;
+  transform: translateY(-2px);
+  background: white;
+  box-shadow: 0 8px 20px rgba(57, 48, 103, 0.08);
+}
+
+.prompt-grid span {
+  display: block;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.message {
+  margin: 0 0 24px;
+}
+
+.message-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin: 0 0 7px;
+}
+
+.message-meta strong {
+  font-size: 11px;
+}
+
+.message-meta span {
+  color: #96968f;
+  font-size: 9px;
+}
+
+.message-body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #40413d;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.markdown-body {
+  white-space: normal;
+}
+
+.markdown-body > :first-child {
+  margin-top: 0;
+}
+
+.markdown-body > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body p,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body blockquote,
+.markdown-body pre,
+.markdown-body table {
+  margin: 0 0 10px;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 20px;
+}
+
+.markdown-body li + li {
+  margin-top: 3px;
+}
+
+.markdown-body code {
+  border: 1px solid rgba(32, 33, 31, 0.09);
+  border-radius: 5px;
+  padding: 1px 4px;
+  background: rgba(32, 33, 31, 0.055);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.92em;
+}
+
+.markdown-body pre {
+  overflow-x: auto;
+  border: 1px solid rgba(32, 33, 31, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #f5f4ef;
+  white-space: pre;
+}
+
+.markdown-body pre code {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  border-left: 2px solid #c8c0ef;
+  padding-left: 10px;
+  color: #666760;
+}
+
+.markdown-body a {
+  color: var(--accent-dark);
+  font-weight: 600;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.markdown-body table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.markdown-body th,
+.markdown-body td {
+  border: 1px solid #deddd6;
+  padding: 5px 7px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.message-user {
+  margin-left: 22%;
+}
+
+.message-user .message-meta {
+  justify-content: flex-end;
+}
+
+.message-user .message-body {
+  background: #ebe7fc;
+  color: #4b3d86;
+  border: 1px solid #ddd6f8;
+  border-radius: 13px 4px 13px 13px;
+  padding: 11px 13px;
+}
+
+.message-assistant .message-body {
+  padding-left: 14px;
+  border-left: 2px solid #8a76e7;
+}
+
+.orchestration-view {
+  border: 1px solid #dfddd5;
+  border-radius: 8px;
+  background: rgba(251, 250, 247, 0.82);
+  padding: 13px;
+  margin: 0 0 24px;
+}
+
+.orchestration-head,
+.orchestration-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.orchestration-head strong,
+.orchestration-row strong {
+  font-size: 12px;
+}
+
+.orchestration-head > span:last-child,
+.orchestration-row span {
+  color: #87887f;
+  font-size: 10px;
+}
+
+.orchestration-block {
+  border-top: 1px solid #e7e5de;
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.orchestration-block p {
+  color: #60615a;
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 7px 0 0;
+}
+
+.orchestration-subtasks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.orchestration-subtasks span {
+  border: 1px solid #dedbd0;
+  border-radius: 999px;
+  padding: 4px 7px;
+  background: white;
+  color: #56574f;
+  font-size: 10px;
+}
+
+.worker-trajectories {
+  display: grid;
+  /* A bare `1fr` track floors at the content's intrinsic width, so one long
+     command line pushes the whole nested timeline outside the transcript. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin: 0 0 18px;
+}
+
+.worker-trajectory {
+  min-width: 0;
+  border-top: 1px solid #e4e0d6;
+  padding-top: 12px;
+}
+
+.worker-trajectory-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.worker-trajectory-head > div {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.worker-trajectory-head strong {
+  color: var(--ink);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.worker-trajectory-head div span {
+  color: #8c877f;
+  font-size: 9px;
+}
+
+.worker-run-status {
+  flex: 0 0 auto;
+  border: 1px solid #d8d2c6;
+  border-radius: 999px;
+  padding: 3px 8px;
+  background: #fffdfa;
+  color: #6f6a62;
+  font-size: 9px;
+  text-transform: capitalize;
+}
+
+.worker-run-status-running,
+.worker-run-status-queued {
+  border-color: #d7c48d;
+  background: #fff8df;
+  color: #7d6326;
+}
+
+.worker-run-status-completed {
+  border-color: #bed7bd;
+  background: #eef8ef;
+  color: #3f7244;
+}
+
+.worker-run-status-failed,
+.worker-run-status-cancelled {
+  border-color: #e1b8af;
+  background: #fbefed;
+  color: #9e4545;
+}
+
+.thinking {
+  opacity: 0.82;
+}
+
+.thinking-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  color: #6f6f69;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+}
+
+.run-error {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-left: 2px solid var(--red);
+  background: #fbefed;
+  padding: 10px 12px;
+  color: #9e4545;
+  font-size: 11px;
+}
+
+.project-run-summary {
+  display: grid;
+  gap: 7px;
+  margin: 14px 0;
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+}
+
+.project-run-summary-head,
+.project-run-preserved {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 7px;
+}
+
+.project-run-preserved {
+  justify-content: flex-start;
+  color: var(--muted);
+}
+
+.project-run-reason {
+  color: var(--red);
+}
+
+.project-run-commits {
+  color: var(--muted);
+}
+
+.composer {
+  margin: 0;
+  border-top: 1px solid #e1dfd8;
+  padding: 13px max(22px, calc((100% - 800px) / 2)) 15px;
+  background: #f8f7f3;
+}
+
+.composer textarea {
+  min-height: 66px;
+  max-height: 180px;
+  resize: none;
+  border: 0;
+  box-shadow: none;
+  margin: 0;
+  padding: 7px 4px;
+  background: transparent;
+  font-size: 12px;
+}
+
+.composer-file-input {
+  display: none;
+}
+
+.composer-attach {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border: 1px solid #d8d2c6;
+  border-radius: 8px;
+  background: #fff;
+  color: #6f6a62;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.composer-attach:hover:not(:disabled) {
+  background: #f4f3ef;
+  color: #2f3238;
+}
+
+.composer-attach:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.composer-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 0;
+}
+
+.composer-attachment {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 260px;
+  border: 1px solid #d8d2c6;
+  border-radius: 10px;
+  padding: 4px 6px 4px 4px;
+  background: #fbfbf9;
+  color: #57544d;
+  font-size: 11px;
+}
+
+.composer-attachment .workspace-image {
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.composer-attachment-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.composer-attachment-remove {
+  flex: 0 0 auto;
+  border: none;
+  padding: 0 2px;
+  background: none;
+  color: #a5a39b;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.composer-attachment-remove:hover {
+  color: #b5453f;
+}
+
+/* A file someone attached, shown in their own message. */
+.message-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.message-files .workspace-image {
+  max-width: 260px;
+  margin: 0;
+}
+
+/* A file the agent produced, shown rather than described. */
+.workspace-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 8px 0;
+  border: 1px solid #e6e4dd;
+  border-radius: 8px;
+}
+
+.workspace-file-loading,
+.workspace-file-missing {
+  color: #a5a39b;
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.workspace-file-missing {
+  color: #b5453f;
+}
+
+.workspace-file-link {
+  border: none;
+  padding: 0;
+  background: none;
+  color: #4a6cf7;
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  cursor: pointer;
+}
+
+.workspace-file-link:hover {
+  text-decoration: underline;
+}
+
+.composer-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.composer-footer > span {
+  margin-right: auto;
+  color: #999992;
+  font-size: 11px;
+}
+
+.send-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: 0;
+  color: white;
+  background: var(--accent);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.send-button:disabled {
+  background: #cfcdc6;
+  cursor: not-allowed;
+}
+
+.no-agent {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.no-agent-art {
+  width: 92px;
+  height: 92px;
+  border-radius: 28px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 25px;
+  color: white;
+  font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  font-size: 34px;
+  background: linear-gradient(145deg, #937ef2, #5641bd);
+  box-shadow: 0 25px 55px rgba(82, 59, 185, 0.25);
+  transform: rotate(-5deg);
+}
+
+.no-agent h1 {
+  font-size: 31px;
+  max-width: 520px;
+  margin: 8px 0;
+}
+
+.no-agent p {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0 0 22px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: rgba(26, 26, 24, 0.58);
+  backdrop-filter: blur(7px);
+}
+
+.modal {
+  width: min(560px, 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  padding: 25px;
+  box-shadow: var(--shadow);
+}
+
+.modal-heading h2 {
+  font-size: 22px;
+  margin: 4px 0;
+}
+
+.modal-heading p {
+  color: var(--muted);
+  margin: 0 0 20px;
+  font-size: 11px;
+}
+
+.modal > label {
+  margin-top: 13px;
+}
+
+.modal > .dialog-field {
+  margin-top: 13px;
+}
+
+.dialog-field {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+}
+
+.dialog-field > input,
+.dialog-field > select {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  margin: 0;
+}
+
+.modal input[aria-invalid="true"] {
+  border-color: #c65b54;
+  box-shadow: 0 0 0 3px rgba(198, 91, 84, 0.1);
+}
+
+.rename-modal {
+  width: min(420px, 100%);
+}
+
+.rename-error {
+  margin: 9px 0 0;
+  color: var(--red);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.field-error {
+  display: block;
+  margin-top: 6px;
+  color: #a13f3f;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.dialog-details-toggle {
+  margin-top: 12px;
+  align-self: start;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.75);
+  }
+}
+
+@media (max-width: 900px) {
+  .app-shell--with-nav,
+  .app-shell--with-nav.app-shell--with-rail {
+    grid-template-columns: 62px 76px minmax(0, 1fr);
+  }
+
+  .sidebar {
+    padding: 20px 10px;
+  }
+
+  .brand {
+    padding: 2px 9px 24px;
+  }
+
+  .brand > div:last-child,
+  .create-button:not(:focus) {
+    font-size: 0;
+  }
+
+  .create-button {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .create-button span {
+    font-size: 22px;
+  }
+
+  .sidebar-label,
+  .agent-card-copy,
+  .mini-dot,
+  .runtime-card,
+  .project-toggle strong,
+  .nested-label,
+  .sidebar-secondary,
+  .empty-project-chats {
+    display: none;
+  }
+
+  .sidebar-actions {
+    gap: 6px;
+  }
+
+  .project-heading {
+    justify-content: center;
+  }
+
+  .project-chats {
+    padding-left: 0;
+  }
+
+  .agent-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
+    padding: 8px;
+  }
+
+  .main {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .prompt-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .app-shell,
+  .app-shell--with-nav,
+  .app-shell--with-nav.app-shell--with-rail {
+    display: block;
+  }
+
+  /* Stacked, the rail becomes a strip of destinations above everything. */
+  .nav-rail {
+    height: auto;
+    min-height: 0;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 12px;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-rail-item {
+    flex-direction: row;
+    gap: 6px;
+    width: auto;
+    padding: 6px 10px;
+  }
+
+  .sidebar {
+    min-height: 0;
+    height: 65px;
+    padding: 10px 14px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    overflow: visible;
+    position: static;
+  }
+
+  .brand {
+    padding: 0;
+  }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .create-button {
+    width: 38px;
+    min-height: 38px;
+    margin-left: auto;
+  }
+
+  .agent-list {
+    max-width: 50vw;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex: 0 1 auto;
+    padding-right: 0;
+  }
+
+  .agent-card {
+    width: auto;
+  }
+
+  .main {
+    padding: 12px;
+    min-height: calc(100vh - 65px);
+  }
+
+  .agent-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    padding: 5px;
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .header-actions .button {
+    flex: 1;
+  }
+
+  .playground {
+    height: calc(100vh - 224px);
+    min-height: 490px;
+  }
+
+  .playground-topbar {
+    padding: 14px;
+  }
+
+  .session-info {
+    display: none;
+  }
+
+  .messages {
+    padding: 22px 15px;
+  }
+
+  .message-user {
+    margin-left: 8%;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The activity transcript: a spine of prose with the work folded between. */
+.stream {
+  margin: 10px 0;
+  display: grid;
+  /* A bare `1fr` track floors at its content's intrinsic width, so one long
+     command line drags the whole transcript past the right edge. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+}
+
+/* What the agent said. Plain text at reading size, no box around it. */
+.stream-say {
+  padding: 4px 0 10px;
+  color: #34363a;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* A finished run's whole process, in one line. */
+.stream-verdict {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 0;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 13px;
+  color: #6f6d66;
+  cursor: pointer;
+}
+
+.stream-verdict:hover strong {
+  color: #17181a;
+}
+
+.stream-verdict strong {
+  color: #34363a;
+  font-weight: 600;
+}
+
+.stream-verdict-mark {
+  flex: 0 0 auto;
+  font-size: 12px;
+}
+
+.stream-verdict--ok .stream-verdict-mark {
+  color: #1f9d55;
+}
+
+.stream-verdict--bad .stream-verdict-mark {
+  color: #c1761f;
+  font-weight: 700;
+}
+
+.stream-verdict--bad strong {
+  color: #a8501c;
+}
+
+.stream-verdict-count {
+  flex: 0 0 auto;
+  color: #a5a39b;
+  font-size: 12px;
+}
+
+.stream-verdict-reason {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: #a8501c;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stream-verdict--open {
+  margin-bottom: 2px;
+  border-bottom: 1px solid #eeece5;
+}
+
+.stream-verdict--open .step-caret {
+  margin-left: auto;
+}
+
+.stream-group {
+  min-width: 0;
+}
+
+.stream-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 5px 0;
+  border: none;
+  /* The fold toggle is the group's header. It rides the top of the transcript
+     viewport while its own steps scroll past, so a long open group can be put
+     away from anywhere inside it instead of only from its first line. Each
+     header unsticks at its group's end, so they never pile up. */
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--paper);
+  text-align: left;
+  color: #8b8a83;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.stream-summary:hover {
+  color: #5f5e58;
+}
+
+.stream-summary-check {
+  color: #1f9d55;
+  font-size: 12px;
+}
+
+.stream-summary-failed {
+  color: #c1761f;
+  font-weight: 600;
+}
+
+.stream-summary .step-caret {
+  margin-left: 0;
+}
+
+.stream-steps {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0 0 0 7px;
+  border-left: 1px solid #e9e7e0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+}
+
+/* A running run's whole process lives in one bounded box: it stays one box
+   tall however many tool calls it produces, follows its own tail (see
+   ToolTimeline), and its wheel stops at the edges instead of spilling into
+   the page. Nothing here binds a settled run — that folds to its verdict. */
+.stream-live-box {
+  max-height: 420px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid #e9e7e0;
+  border-radius: 6px;
+  padding: 4px 10px;
+  background: var(--paper);
+}
+
+/* The box's fold line. Pinned to the top of the transcript viewport, so the
+   whole long stream can be put away from wherever the reader is inside it. */
+.stream-live {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--paper);
+}
+
+.stream-steps > li {
+  min-width: 0;
+}
+
+/* The operator's own words: on the spine with the agent's, never behind a fold. */
+.stream-steer {
+  margin: 4px 0 10px;
+  padding: 8px 12px;
+  border-left: 2px solid #b6a9f0;
+  border-radius: 0 8px 8px 0;
+  background: #f6f4ff;
+  color: #3f3d52;
+  font-size: 13.5px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.stream-debug {
+  justify-self: start;
+  margin-top: 2px;
+  border: none;
+  padding: 3px 0;
+  background: none;
+  color: #a5a39b;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.stream-debug:hover {
+  color: #6f6d66;
+}
+
+/* One step: an icon, a sentence, how long it took. */
+.step-line {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 7px;
+  background: none;
+  text-align: left;
+  color: #6f6d66;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.step-line:hover {
+  background: #f4f3ef;
+}
+
+.step-line--steer {
+  cursor: default;
+  background: #f6f4ff;
+}
+
+.step--error .step-line {
+  color: #b5453f;
+}
+
+.step--in_progress .step-line {
+  color: #34363a;
+}
+
+.step-glyph {
+  flex: 0 0 13px;
+  width: 13px;
+  text-align: center;
+  color: #b3b1a9;
+  font-size: 11px;
+}
+
+.step-glyph--error {
+  color: #d64545;
+  font-weight: 700;
+}
+
+.step-glyph--pending {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border: 2px solid #d5d3cb;
+  border-top-color: #4a6cf7;
+  border-radius: 50%;
+  animation: timeline-spin 0.8s linear infinite;
+}
+
+.step-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.step-steer-label {
+  margin-right: 8px;
+  color: #6b5bd6;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.step-duration {
+  flex: 0 0 auto;
+  color: #b3b1a9;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.step-caret {
+  flex: 0 0 auto;
+  color: #c2c0b8;
+  font-size: 11px;
+}
+
+/* The one card the design allows, one level deep, with named parts. */
+.step-detail {
+  margin: 4px 0 8px 22px;
+  border: 1px solid #e9e7e0;
+  border-radius: 9px;
+  padding: 10px 12px;
+  background: #fbfbf9;
+  display: grid;
+  gap: 10px;
+}
+
+.step-detail--prose {
+  display: block;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #4a4843;
+}
+
+.step-field-label {
+  margin-bottom: 4px;
+  color: #96948c;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.step-field pre {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 7px;
+  background: #f3f2ee;
+  color: #43413c;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.step-clamp {
+  margin-top: 6px;
+  border: none;
+  padding: 2px 0;
+  background: none;
+  color: #4a6cf7;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@keyframes timeline-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+.run-result {
+  margin: 14px 0;
+  border: 1px solid #d8dbe2;
+  border-left: 3px solid #4a6cf7;
+  border-radius: 10px;
+  padding: 12px 16px 14px;
+  background: #fff;
+}
+
+.run-result--failed {
+  border-left-color: #d64545;
+}
+
+.run-result-head {
+  margin-bottom: 6px;
+}
+
+.run-result-body {
+  color: #34363a;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.run-result-files {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #edeef1;
+}
+
+.run-result-files-label {
+  color: #858c98;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.run-result-files ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.run-result-files code {
+  font-size: 12px;
+  color: #4a5261;
+}
+
+.run-result-files-more {
+  color: #8a857c;
+  font-size: 11px;
+}
+
+
+
+.send-button--stop {
+  background: #2f3238;
+}
+
+.send-button--stop:hover:not(:disabled) {
+  background: #1f2126;
+}
+
+.send-button-square {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.chat-menu {
+  position: fixed;
+  z-index: 60;
+  min-width: 168px;
+  padding: 5px;
+  border: 1px solid #3f3f3a;
+  border-radius: 10px;
+  background: #262623;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  overflow: auto;
+}
+
+.chat-menu-title {
+  padding: 5px 9px 7px;
+  color: #8e8e87;
+  font-size: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-menu-item {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 9px;
+  background: none;
+  color: #edebe4;
+  text-align: left;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.chat-menu-item:hover {
+  background: #333330;
+}
+
+.chat-menu-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.chat-menu-item--danger {
+  color: #e08a84;
+}
+
+.chat-menu-item--danger:hover {
+  background: #3a2c2c;
+}
+
+
+.usage-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 2px 0 8px;
+  font-size: 12px;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
+}
+
+.plan-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.plan-count {
+  font-weight: 500;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
+}
+
+.plan-list {
+  list-style: none;
+  margin: 0;
+  padding: 10px 0 0;
+}
+
+.plan-row {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) 16px;
+  align-items: start;
+  gap: 8px;
+  padding: 7px 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.plan-index {
+  color: #9aa1ac;
+  font-variant-numeric: tabular-nums;
+}
+
+.plan-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.plan-mark {
+  justify-self: end;
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.plan-mark--done {
+  color: #1f9d55;
+}
+
+.plan-mark--pending {
+  color: #c7ccd4;
+}
+
+.plan-mark--active {
+  border: 2px solid #c7ccd4;
+  border-top-color: #4a6cf7;
+  border-radius: 50%;
+  animation: timeline-spin 0.8s linear infinite;
+}
+
+/* Task outcome is a separate claim from run phase, so it reads as its own row
+   rather than another chip on the orchestration header. */
+.orchestration-outcome {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.65rem 0.85rem;
+  margin: 0.5rem 0 0.75rem;
+  border-radius: 8px;
+  border-left: 3px solid var(--outcome-accent, #8a8a8a);
+  background: rgba(127, 127, 127, 0.08);
+}
+.orchestration-outcome strong { font-size: 0.95rem; }
+.orchestration-outcome .outcome-evidence {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+}
+.outcome-succeeded { --outcome-accent: #2e9e5b; }
+.outcome-partial   { --outcome-accent: #c9871f; }
+.outcome-failed    { --outcome-accent: #cc4b4b; }
+.outcome-unknown   { --outcome-accent: #8a8a8a; }
+
+/* Undelivered messages lead: the sender believes it passed the information on,
+   and nothing else in the run says otherwise. */
+.coordination-panel { margin: 0.5rem 0 0.75rem; }
+.coordination-message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.5rem 0.7rem;
+  margin-bottom: 0.35rem;
+  border-radius: 6px;
+  border-left: 3px solid var(--coord-accent, #8a8a8a);
+  background: rgba(127, 127, 127, 0.07);
+  font-size: 0.82rem;
+}
+.coordination-row { display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap; }
+.coordination-route { font-variant-numeric: tabular-nums; opacity: 0.85; }
+.coordination-kind { font-size: 0.72rem; opacity: 0.75; }
+.kind-wakeup { font-weight: 600; opacity: 0.95; }
+.coordination-state { margin-left: auto; font-size: 0.72rem; opacity: 0.7; }
+.coordination-reason { font-size: 0.72rem; opacity: 0.9; }
+.coordination-content { opacity: 0.9; overflow-wrap: anywhere; }
+.state-delivered { --coord-accent: #2e9e5b; }
+.state-queued { --coord-accent: #c9871f; }
+.state-undeliverable { --coord-accent: #cc4b4b; }
+
+/* Creature sprites -------------------------------------------------------- */
+
+.sprite {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex: none;
+  --sprite-delay: -0.17s;
+  --sprite-idle-duration: 4.4s;
+  --sprite-work-duration: 0.92s;
+  --sprite-search-duration: 2.6s;
+}
+
+.sprite-art {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 88%;
+  will-change: transform;
+}
+
+.sprite-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform-origin: 50% 88%;
+  will-change: transform;
+  user-select: none;
+}
+
+/* The old Pokémon pack animated inside each GIF. These single-frame originals
+   get the same sense of life from a shared motion rig. A stable creature id
+   gives every cast member a different phase, so a party never bobs in lockstep. */
+.sprite[data-creature="panda"] { --sprite-delay: -0.83s; }
+.sprite[data-creature="beaver"] { --sprite-delay: -1.37s; }
+.sprite[data-creature="hedgehog"] { --sprite-delay: -2.03s; }
+.sprite[data-creature="fox"] { --sprite-delay: -0.41s; }
+.sprite[data-creature="owl"] { --sprite-delay: -1.11s; }
+.sprite[data-creature="rabbit"] { --sprite-delay: -1.73s; }
+.sprite[data-creature="squirrel"] { --sprite-delay: -2.29s; }
+.sprite[data-creature="penguin"] { --sprite-delay: -0.63s; }
+.sprite[data-creature="cat"] { --sprite-delay: -1.49s; }
+.sprite[data-creature="raccoon"] { --sprite-delay: -2.17s; }
+.sprite[data-creature="koala"] { --sprite-delay: -2.71s; }
+.sprite[data-creature="bear"] { --sprite-delay: -0.97s; }
+.sprite[data-creature="hamster"] { --sprite-delay: -1.89s; }
+.sprite[data-creature="shiba"] { --sprite-delay: -2.43s; }
+.sprite[data-creature="sloth"] { --sprite-delay: -3.07s; }
+
+/* Quick animals feel springier; the heavier and sleepier cast breathes more
+   slowly. The difference is deliberately small so all sixteen remain a set. */
+.sprite:is(
+  [data-creature="fox"],
+  [data-creature="rabbit"],
+  [data-creature="squirrel"],
+  [data-creature="hamster"],
+  [data-creature="shiba"]
+) {
+  --sprite-idle-duration: 3.1s;
+  --sprite-work-duration: 0.62s;
+  --sprite-search-duration: 1.85s;
+}
+
+.sprite:is(
+  [data-creature="panda"],
+  [data-creature="owl"],
+  [data-creature="koala"],
+  [data-creature="bear"],
+  [data-creature="sloth"]
+) {
+  --sprite-idle-duration: 4.4s;
+  --sprite-work-duration: 0.88s;
+  --sprite-search-duration: 2.7s;
+}
+
+.sprite-fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sprite-mood {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--muted);
+}
+
+.sprite--idle .sprite-art img {
+  animation: sprite-idle var(--sprite-idle-duration) cubic-bezier(0.37, 0, 0.2, 1)
+    var(--sprite-delay) infinite;
+}
+
+.sprite--waiting .sprite-art img {
+  animation: sprite-wait calc(var(--sprite-idle-duration) + 1.2s) ease-in-out
+    var(--sprite-delay) infinite;
+}
+
+/* A creature that finished is still on screen, usually for the rest of the
+   session. The victory turn plays once on the wrapper above this; underneath it
+   the artwork has to go on breathing, or a party freezes solid the moment its
+   run ends -- which is what it did, since `done` set no motion on the image. */
+.sprite--done .sprite-art img {
+  animation: sprite-idle var(--sprite-idle-duration) cubic-bezier(0.37, 0, 0.2, 1)
+    var(--sprite-delay) infinite;
+}
+
+/* Thinking: a slow head-tilt float with three dots blinking above. The pose is
+   made of motion, not of a second drawing. */
+.sprite--thinking .sprite-art img {
+  animation: sprite-ponder 2.2s ease-in-out var(--sprite-delay) infinite;
+}
+
+.sprite--thinking .sprite-mood {
+  animation: sprite-blink 1.4s steps(1, end) infinite;
+  color: var(--accent);
+}
+
+.sprite--hurt .sprite-art {
+  filter: grayscale(0.72) saturate(0.55);
+  opacity: 0.68;
+  transform: translateY(6%) rotate(-7deg) scaleX(1.03) scaleY(0.97);
+}
+
+.sprite--hurt .sprite-mood {
+  color: var(--red);
+}
+
+/* Standing back up after a failure is a transition, not a state: it plays once
+   when the class changes, then the working loop takes over. */
+.sprite--working .sprite-art,
+.sprite--searching .sprite-art {
+  animation: sprite-recover 0.52s cubic-bezier(0.2, 0.9, 0.3, 1.2) 1;
+}
+
+.sprite--working .sprite-art img {
+  animation: sprite-work var(--sprite-work-duration) ease-in-out var(--sprite-delay)
+    infinite;
+}
+
+.sprite--searching .sprite-art img {
+  animation: sprite-scan var(--sprite-search-duration) ease-in-out var(--sprite-delay)
+    infinite;
+}
+
+/* A one-off on the wrapper, so the creature's own motion goes on running on the
+   image underneath instead of being replaced for the rest of the session. */
+.sprite[data-motion="cheer"] .sprite-art {
+  animation-name: sprite-cheer;
+  animation-duration: var(--sprite-motion-duration, 2s);
+  animation-timing-function: cubic-bezier(0.22, 0.9, 0.3, 1);
+  animation-iteration-count: 1;
+}
+
+.sprite--done .sprite-mood {
+  color: var(--green);
+  animation: sprite-spark 2.1s ease-out 1;
+}
+
+@keyframes sprite-idle {
+  0%, 16%, 100% { transform: translateY(0) rotate(0) scale(1); }
+  34% { transform: translateY(-3%) rotate(-0.7deg) scaleX(0.99) scaleY(1.02); }
+  48% { transform: translateY(-4%) rotate(0.8deg) scaleX(0.985) scaleY(1.025); }
+  62% { transform: translateY(0) rotate(0) scaleX(1.025) scaleY(0.975); }
+  72% { transform: translateY(0) rotate(0) scale(1); }
+}
+
+@keyframes sprite-wait {
+  0%, 12%, 100% { transform: translateY(0) rotate(0) scale(1); }
+  34% { transform: translateY(-2%) rotate(-1.6deg) scaleY(1.015); }
+  58% { transform: translateY(-2%) rotate(1.6deg) scaleY(1.015); }
+  78% { transform: translateY(0) rotate(0) scaleX(1.018) scaleY(0.982); }
+  86% { transform: translateY(0) rotate(0) scale(1); }
+}
+
+@keyframes sprite-ponder {
+  0%, 100% { transform: translateY(0) rotate(-3.5deg) scale(1); }
+  50% { transform: translateY(-5%) rotate(3deg) scale(1.025); }
+}
+
+@keyframes sprite-blink {
+  0% { opacity: 0.25; }
+  50% { opacity: 1; }
+  100% { opacity: 0.25; }
+}
+
+@keyframes sprite-work {
+  0%, 100% { transform: translateY(0) rotate(0) scale(1); }
+  18% { transform: translateY(-7%) rotate(-1.2deg) scaleX(0.98) scaleY(1.035); }
+  34% { transform: translateY(0) rotate(0) scaleX(1.045) scaleY(0.955); }
+  52% { transform: translateY(-4%) rotate(1.2deg) scaleX(0.99) scaleY(1.02); }
+  68% { transform: translateY(0) rotate(0) scaleX(1.025) scaleY(0.975); }
+  80% { transform: translateY(0) rotate(0) scale(1); }
+}
+
+@keyframes sprite-scan {
+  0%, 10%, 50%, 90%, 100% { transform: translateX(0) rotate(0) scale(1); }
+  22%, 38% { transform: translateX(-5%) rotate(-2deg) scaleY(1.015); }
+  62%, 78% { transform: translateX(5%) rotate(2deg) scaleY(1.015); }
+}
+
+@keyframes sprite-recover {
+  0% { transform: translateY(7%) rotate(-7deg) scaleX(1.04) scaleY(0.96); }
+  58% { transform: translateY(-4%) rotate(2deg) scaleX(0.98) scaleY(1.03); }
+  100% { transform: translateY(0) rotate(0); }
+}
+
+@keyframes sprite-cheer {
+  /* Crouch, pop, land heavy, a smaller second bounce, settle. Two dimensions
+     only: the artwork is one flat drawing with no back, so a somersault -- what
+     this used to be -- turned it edge-on and showed a mirrored silhouette. That
+     reads as a card being flipped, not as a small animal that is pleased.
+     It is a moment of arrival, not the state the creature is left in; the
+     creature's own motion is what carries the rest of the session. */
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  9% { transform: translateY(5%) rotate(0deg) scaleX(1.12) scaleY(0.88); }
+  27% { transform: translateY(-34%) rotate(-5deg) scaleX(0.9) scaleY(1.12); }
+  42% { transform: translateY(0) rotate(0deg) scaleX(1.1) scaleY(0.9); }
+  56% { transform: translateY(-15%) rotate(4deg) scaleX(0.95) scaleY(1.06); }
+  70% { transform: translateY(0) rotate(0deg) scaleX(1.06) scaleY(0.94); }
+  84% { transform: translateY(-4%) rotate(0deg) scaleX(0.99) scaleY(1.02); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); }
+}
+
+@keyframes sprite-spark {
+  0% { opacity: 0; transform: translateY(3px) rotate(-12deg) scale(0.35); }
+  38% { opacity: 1; transform: translateY(-2px) rotate(12deg) scale(1.3); }
+  100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sprite .sprite-art,
+  .sprite .sprite-art img,
+  .sprite .sprite-mood {
+    animation: none !important;
+  }
+}
+
+/* Attributed transcript --------------------------------------------------- */
+
+.stream-summary-actor {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.stream-summary-role {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: #f0efec;
+  border: none;
+  border-radius: 999px;
+  padding: 2px 7px;
+}
+
+/* A move label reads as a chip, so the eye can find the verb before the noun. */
+.step-move {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  color: var(--tint-code-ink);
+  background: var(--tint-code);
+  border-radius: 6px;
+  padding: 3px 7px;
+  flex: none;
+}
+
+.step-move--search { color: var(--tint-research-ink); background: var(--tint-research); }
+.step-move--edit { color: var(--tint-ops-ink); background: var(--tint-ops); }
+.step-move--coordinate { color: var(--ink-soft); background: #f0efec; }
+/* One agent speaking to another is the one move that is not a tool call, so it
+   is the one that does not wear the neutral tool tint. */
+.step-move--talk { color: var(--tint-review-ink); background: var(--tint-review); }
+
+/* Tool names are as long as whoever wrote the tool made them. The chip stops
+   rather than pushing the sentence beside it off the line. */
+.step-move {
+  max-width: 15ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.step-line {
+  border-radius: 9px;
+}
+
+.step--in_progress > .step-line,
+.step--error > .step-line {
+  background: transparent;
+}
+
+/* An opened step is a card. Closed, it is a line -- that difference is the
+   whole reason a hundred-step run stays readable. */
+.step-detail {
+  margin: 4px 0 10px;
+  padding: 12px;
+  border-radius: 11px;
+  background: #faf9f7;
+  border: 1px solid var(--line);
+}
+
+.step-detail--prose {
+  background: transparent;
+  border: none;
+  padding: 0 0 0 2px;
+}
+
+.step-field-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.step-detail pre {
+  margin: 0;
+  padding: 9px 11px;
+  border-radius: 8px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font-size: 11.5px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.step--error .step-detail {
+  background: #fdf3f3;
+  border-color: #f3dcdc;
+}
+
+/* A decision the leader made, set apart from the work someone did. */
+.step--decision > .step-line {
+  background: var(--accent-soft);
+}
+
+.step--decision .step-text {
+  color: var(--accent-dark);
+}
+
+/* Party and bench --------------------------------------------------------- */
+
+.party {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 0 10px 12px;
+}
+
+.party-heading {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-right: 6px;
+}
+
+.party-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.party-card {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--shell-raised);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  animation: party-join 0.4s ease-out;
+}
+
+.party-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.party-card-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.party-card-copy strong {
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.party-card-copy span {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.party-move {
+  font-size: 10px;
+  color: var(--ink-soft);
+  flex: none;
+}
+
+.bench-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-right: 6px;
+}
+
+.bench-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--shell-raised);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bench-row.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* The role tag yields, never the name. A `flex: none` tag holding a long
+   specialty claimed the whole row and squeezed the name to zero, leaving the
+   one field that identifies a worker invisible behind the one that does not. */
+.bench-row-name {
+  flex: 1 1 auto;
+  min-width: 5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+/* The tag is a short constant word; squeezed to "WOR…" it says nothing. The
+   NAME is what gives way — with an ellipsis, and the full name in `title`.
+   The max-width is the backstop for a pathological free-text label. */
+.bench-row .role-tag {
+  flex: 0 0 auto;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Joining the party is a real state change, so it gets to be seen happening. */
+@keyframes party-join {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .party-card { animation: none; }
+}
+
+/* Rail cards -------------------------------------------------------------- */
+
+/* White cards on the warm canvas. The hierarchy comes from the surface, not
+   from a border on every element, which is what made the old rail read flat. */
+.rail-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 15px;
+  border-radius: var(--radius);
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
+}
+
+.rail-card-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.rail-card-count {
+  color: var(--ink-soft);
+}
+
+/* Undelivered mail is counted on the fold line: the timeline inside stays
+   chronological, so this is what warns before anyone opens the card. */
+.agent-message-lost {
+  color: #b3402e;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-right: 7px;
+}
+
+.inspector {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.inspector-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.inspector-head > .sprite {
+  flex: none;
+}
+
+.inspector-identity {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+/* An agent name is free text, and a specialty is free text a leader wrote, so
+   neither has a length this column can count on. They stop at the card edge
+   instead of running past it. */
+.inspector-identity > * {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inspector-identity strong {
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+.inspector-creature {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.inspector-state-label {
+  margin-top: 6px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.inspector-state {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+/* Role tags --------------------------------------------------------------- */
+
+.role-tag {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  border-radius: 999px;
+  padding: 2px 7px;
+  white-space: nowrap;
+  /* The label inside is a leader's free text. A pill that will not wrap and
+     will not clip is a pill that pushes its way out of whatever holds it. */
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Working now, or not. Nothing else earns a colour on this tag. */
+.role-tag--running { background: #e4f3ea; color: #1f7a4a; }
+.role-tag--idle { background: #f0efec; color: var(--ink-soft); }
+
+/* Status dots ------------------------------------------------------------- */
+
+.state-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--muted);
+}
+
+.state-dot--working { background: var(--green); }
+.state-dot--searching { background: var(--blue); }
+.state-dot--thinking { background: var(--accent); }
+.state-dot--waiting { background: var(--amber); }
+.state-dot--hurt { background: var(--red); }
+.state-dot--done { background: var(--green); }
+
+/* Inspector statistics ---------------------------------------------------- */
+
+.inspector-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding-top: 13px;
+  border-top: 1px solid var(--line);
+}
+
+.inspector-stats div {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 6px;
+}
+
+.stat-glyph {
+  grid-row: 1;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.inspector-stats strong {
+  grid-row: 1;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+
+.inspector-stats > div > span:last-child {
+  grid-row: 2;
+  grid-column: 1 / -1;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.inspector-creature-note {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Moves and current move -------------------------------------------------- */
+
+.inspector-moves {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inspector-moves li,
+.inspector-current {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+}
+
+.inspector-move-glyph {
+  width: 18px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.inspector-move-label {
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  flex: 1;
+  /* A long move name yields; the count is the row's point and never leaves
+     the card. INSPECT_WORKER_PROGRESS was pushing its tally clean out. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inspector-move-count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+}
+
+.inspector-command {
+  font-size: 11.5px;
+  background: #f5f4f1;
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 7px 9px;
+  overflow-x: auto;
+}
+
+/* The reversal that makes the point: a cartoon directly above real output. */
+.inspector-terminal {
+  margin: 0;
+  max-height: 190px;
+  overflow: auto;
+  font-size: 11px;
+  line-height: 1.55;
+  background: #17171c;
+  color: #cfe9c0;
+  border-radius: 10px;
+  padding: 11px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Active workers ---------------------------------------------------------- */
+
+.worker-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.worker-rows li + li {
+  border-top: 1px solid var(--line);
+}
+
+.worker-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 4px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 9px;
+}
+
+.worker-row:hover {
+  background: #faf9f7;
+}
+
+.worker-row.selected {
+  background: var(--accent-soft);
+}
+
+.worker-row-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.worker-row-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+/* The name holds its ground and the tag gives way, for the same reason it does
+   on the bench: the name is what tells two workers apart. */
+.worker-row-head strong {
+  flex: 1 1 auto;
+  font-size: 13px;
+  min-width: 5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Same deal as the bench: the tag stays whole, the name truncates. */
+.worker-row-head .role-tag {
+  flex: 0 0 auto;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.worker-row-state {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.worker-row-move {
+  font-size: 11px;
+  color: var(--ink-soft);
+  flex: none;
+}
+
+/* Mission phases ---------------------------------------------------------- */
+
+/* A stepper, not a sentence. The connector lines are what make it read as one
+   journey rather than six labels that happen to sit in a row. */
+.phases {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.phase {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 4px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* The connector runs up from this stop's bubble to the one before it, so the
+   column reads as one journey rather than six separate rows. */
+.phase-link {
+  position: absolute;
+  left: 14px;
+  bottom: 50%;
+  width: 1px;
+  height: 100%;
+  background: var(--line);
+}
+
+.phase-bubble {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.phase-label {
+  letter-spacing: 0.01em;
+}
+
+.phase--done .phase-bubble {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.phase--done .phase-label {
+  color: var(--ink-soft);
+}
+
+.phase--current .phase-bubble {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.14);
+}
+
+.phase--current .phase-label {
+  color: var(--accent-dark);
+  font-weight: 600;
+}
+
+.phase--failed .phase-bubble {
+  border-color: var(--red);
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(208, 83, 83, 0.14);
+}
+
+.phase--failed .phase-label {
+  color: var(--red);
+}
+
+/* The rail can hold an inspector above the plan, so they need separating. */
+.rail > * + * {
+  margin-top: 14px;
+}
+
+
+/* Sidebar crew cards ------------------------------------------------------ */
+
+/* The chat, shown as who is in it. A letter in a box told you nothing; three
+   creatures on a row are recognisable before you have read the name. */
+.crew {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 7px 9px 5px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #f7f5f1, #efece6);
+  min-height: 46px;
+}
+
+.crew .sprite img {
+  filter: drop-shadow(0 2px 3px rgba(40, 34, 24, 0.18));
+}
+
+.crew-more {
+  align-self: center;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.agent-card:hover {
+  background: var(--shell-raised-strong);
+}
+
+.agent-card.selected {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.agent-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.crew-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.crew-dot--live {
+  background: var(--green);
+  box-shadow: 0 0 0 3px rgba(42, 160, 106, 0.18);
+}
+
+.crew-dot--idle {
+  background: #cfccc5;
+}
+
+
+/* Mission plan ------------------------------------------------------------ */
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  padding: 15px;
+  border-radius: var(--radius);
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
+  border: none;
+}
+
+.plan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.plan-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  counter-reset: none;
+}
+
+.plan-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.plan-index {
+  display: none;
+}
+
+.plan-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.plan-row:has(.plan-mark--done) .plan-text {
+  color: var(--muted);
+}
+
+.plan-row:has(.plan-mark--active) .plan-text {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.plan-mark {
+  order: -1;
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  margin-top: 2px;
+  border-radius: 50%;
+  flex: none;
+  font-size: 9px;
+}
+
+.plan-mark--done {
+  background: var(--tint-review);
+  color: var(--tint-review-ink);
+}
+
+.plan-mark--active {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.16);
+}
+
+.plan-mark--pending {
+  border: 1px solid var(--line);
+  color: transparent;
+}
+
+.rail > * + * {
+  margin-top: 14px;
+}
+
+
+/* Composer ---------------------------------------------------------------- */
+
+.composer {
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
+}
+
+.composer:focus-within {
+  border-color: var(--accent-line);
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.09);
+}
+
+.playground {
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.playground-topbar {
+  border-bottom: 1px solid var(--line);
+}
+
+.messages {
+  background: transparent;
+}
+
+/* The transcript's own group header, now that it carries a creature. */
+.stream-summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 9px;
+  border-radius: 10px;
+}
+
+.stream-summary:hover {
+  background: #faf9f7;
+}
+
+
+/* Sidebar surfaces -------------------------------------------------------- */
+
+.sidebar {
+  background: var(--shell);
+  border-right: 1px solid var(--line);
+}
+
+.brand-mark {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.28);
+}
+
+.brand span,
+.sidebar-label,
+.runtime-card > span:last-child {
+  color: var(--shell-muted);
+}
+
+.sidebar-label {
+  border-color: var(--shell-line);
+}
+
+/* The primary action carries the accent at full strength; nothing else in the
+   column is allowed to, so it stays the one obvious thing to press. */
+.create-button {
+  background: var(--accent);
+  border-color: transparent;
+  box-shadow: 0 6px 16px rgba(108, 92, 231, 0.32);
+}
+
+.create-button:hover:not(:disabled) {
+  background: var(--accent-dark);
+}
+
+.sidebar-secondary {
+  background: var(--paper);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.sidebar-secondary:hover:not(:disabled) {
+  background: var(--shell-raised);
+}
+
+.runtime-card {
+  background: var(--shell-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+}
+
+.runtime-card strong {
+  color: var(--ink);
+}
+
+.project-group,
+.worker-toggle,
+.empty-project-chats {
+  color: var(--shell-muted);
+}
+
+/* Rail mascot ------------------------------------------------------------- */
+
+/* Decoration, and named as such: it is the one thing on the page that is not
+   read off a run. It sits below everything the rail actually reports, is
+   hidden from assistive tech, and cannot be clicked. */
+.rail-mascot {
+  margin-top: auto;
+  padding-top: 26px;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+  user-select: none;
+}
+
+.rail-mascot img {
+  width: 108px;
+  height: auto;
+  opacity: 0.5;
+  filter: saturate(0.85);
+  animation: mascot-drift 6s ease-in-out infinite;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes mascot-drift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail-mascot img { animation: none; }
+}
+
+/* Sidebar text and lines, now that the panel is light ---------------------- */
+
+.brand span,
+.sidebar-label,
+.agent-card-copy span,
+.worker-toggle,
+.empty-project-chats,
+.runtime-card > span:last-child {
+  color: var(--muted);
+}
+
+.brand strong,
+.agent-card-copy strong,
+.runtime-card strong {
+  color: var(--ink);
+}
+
+.worker-toggle {
+  border-left-color: var(--line);
+}
+
+.worker-toggle:hover {
+  color: var(--ink-soft);
+}
+
+/* The chat row is a card on a white panel, so it needs an edge of its own. */
+.agent-card {
+  border-color: var(--line);
+}
+
+.agent-card:hover {
+  background: var(--shell-raised);
+  border-color: #ddd9d2;
+}
+
+.sidebar-label {
+  border-color: var(--line);
+}
+
+/* Sidebar actions --------------------------------------------------------- */
+
+/* Two actions, one shape. They differ by fill, not by size: a primary and a
+   secondary of different heights read as an accident rather than a pair. */
+.sidebar-actions .button {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.sidebar-actions .sidebar-secondary {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.sidebar-label-end {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.label-action {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.label-action:hover {
+  background: var(--shell-raised-strong);
+  color: var(--ink);
+}
+
+/* Project rows, now on a light panel -------------------------------------- */
+
+.project-toggle {
+  color: var(--ink);
+}
+
+.project-toggle strong {
+  font-weight: 600;
+}
+
+.project-toggle span {
+  color: var(--muted);
+}
+
+.project-toggle:hover {
+  color: var(--ink);
+}
+
+.project-new-chat {
+  color: var(--muted);
+}
+
+.project-new-chat:hover {
+  background: var(--shell-raised-strong);
+  color: var(--ink);
+}
+
+
+/* Composer send / stop ---------------------------------------------------- */
+
+/* The button held a block child with no centring, so the stop square sat in
+   the corner. Grid centres whatever the button contains -- glyph or shape. */
+.send-button {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.modal .error-banner {
+  margin: 0;
+}
+
+/* A step the Run never closed. Not a spinner: nothing is running any more. */
+.step-glyph--stalled {
+  color: var(--muted);
+}
+
+/* A worker session has no composer -- nothing can be sent to a worker -- so the
+   footer says so instead of leaving an input that would fail on submit. */
+.composer--readonly {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Agent-to-agent messages -------------------------------------------------- */
+
+/* A conversation, laid out as one. The route line names both ends because a
+   message with only its text shown cannot say who is talking to whom. */
+.talk-route {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.talk-party {
+  font-weight: 600;
+}
+
+.talk-arrow {
+  color: var(--muted);
+}
+
+.talk-undelivered {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.talk-content {
+  margin: 7px 0 0;
+  padding: 9px 11px;
+  border-radius: 10px;
+  background: var(--tint-review);
+  color: var(--ink);
+  font-size: 13px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.talk-refs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.talk-refs code {
+  font-size: 10px;
+  color: var(--ink-soft);
+}
+
+/* Artifacts ---------------------------------------------------------------- */
+
+.artifact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* A path is long and its tail is the part that identifies it, so the row
+   scrolls rather than truncating the file name away. */
+.artifact-list .workspace-file-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  overflow-x: auto;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+/* The project row's own actions, alongside "new chat". */
+.project-menu-button {
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  line-height: 1;
+}
+
+.project-menu-button:hover {
+  background: var(--shell-raised-strong);
+  color: var(--ink);
+}
+
+/* Run header and metadata ------------------------------------------------- */
+
+/* The line that says which Run the transcript below it is. It sits between the
+   earlier Runs and this one's prompt, so it reads as a boundary rather than as
+   a panel: a rule across the column, not another card. */
+.run-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  margin: 18px 0 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.run-header-identity {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.run-header-identity h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.run-header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.run-status {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--shell-raised-strong);
+  color: var(--ink-soft);
+}
+
+.run-status--running,
+.run-status--queued {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.run-status--completed {
+  background: #e9f4ec;
+  color: #2f7c50;
+}
+
+.run-status--failed {
+  background: #fbeaea;
+  color: var(--red);
+}
+
+/* Pushed to the far end so the Run's identity stays left-aligned with the
+   transcript, and the control that changes it is somewhere deliberate. */
+.run-header-picker {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.run-header-picker select {
+  min-height: 30px;
+  max-width: 320px;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--ink);
+}
+
+/* What the Run amounted to, on the same line-height and colour as the token
+   and cost summary it sits above -- they are one footer, read together. */
+.run-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 10px 0 2px;
+  font-size: 12px;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
+}
+
+.selected-skills {
+  margin: 12px 0;
+  border: 1px solid #d8dbe2;
+  border-left: 3px solid #2f8f6f;
+  border-radius: 8px;
+  padding: 10px 14px 12px;
+  background: #fff;
+}
+
+.selected-skills-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: #747b86;
+  font-size: 12px;
+}
+
+.selected-skills ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 9px;
+}
+
+.selected-skills li {
+  display: grid;
+  gap: 4px;
+}
+
+.selected-skill-main {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: #30343a;
+  font-size: 13px;
+}
+
+.selected-skill-main span {
+  color: #747b86;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.selected-skills code {
+  color: #4a5261;
+  font-size: 12px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.selected-skills p {
+  margin: 0;
+  color: #5f6670;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* Agent-to-agent messages ------------------------------------------------- */
+
+/* Folded shut by default: this is context for one agent, not the story of the
+   run, and the rail is already dense. The summary carries a count and nothing
+   else, so an unopened card costs one line. */
+.agent-messages > summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.agent-messages > summary::-webkit-details-marker {
+  display: none;
+}
+
+.agent-messages > summary::after {
+  content: "▸";
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.agent-messages[open] > summary::after {
+  content: "▾";
+}
+
+.agent-message-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agent-message {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--shell-raised);
+  border-left: 2px solid var(--line);
+}
+
+/* A note nobody read is the failure this channel makes easiest to miss, so it
+   is marked rather than merely sorted first. */
+.agent-message.state-undeliverable {
+  border-left-color: var(--red);
+  background: #fdf3f3;
+}
+
+.agent-message.state-queued {
+  border-left-color: var(--amber);
+}
+
+.agent-message-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.agent-message-route {
+  font-weight: 650;
+  color: var(--ink);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agent-message-kind {
+  margin-left: auto;
+  flex: none;
+  color: var(--accent-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.agent-message-body {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.agent-message-state {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+/* Published artifacts ----------------------------------------------------- */
+
+.artifact-published-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.artifact-published > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  list-style: none;
+  padding: 3px 0;
+}
+
+.artifact-published > summary::-webkit-details-marker {
+  display: none;
+}
+
+.artifact-published-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--accent-dark);
+}
+
+.artifact-published-size {
+  margin-left: auto;
+  flex: none;
+  font-size: 10px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.artifact-published-source {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.artifact-published-failure {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: var(--red);
+}
+
+.artifact-published-body {
+  margin: 6px 0 0;
+  max-height: 260px;
+  overflow: auto;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  background: var(--shell-raised-strong);
+  font-size: 11px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Skill hub --------------------------------------------------------------- */
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--shell-raised);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidebar-link:hover {
+  background: var(--shell-raised-strong);
+  color: var(--ink);
+}
+
+.sidebar-link--active {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.skill-hub {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 26px 28px 40px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.skill-hub-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.skill-hub-head h1 {
+  margin: 4px 0 6px;
+  font-size: 22px;
+}
+
+.skill-hub-head p {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.skill-hub-head .button {
+  margin-left: auto;
+  flex: none;
+}
+
+/* List left, the opened skill right. One column when there is no room for
+   two, so the detail is never squeezed into a strip. */
+.skill-hub-body {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .skill-hub-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.skill-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skill-row {
+  display: grid;
+  gap: 3px;
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.skill-row:hover {
+  border-color: var(--accent-line);
+}
+
+.skill-row--open {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+}
+
+.skill-row-name {
+  font-weight: 650;
+  font-size: 13px;
+}
+
+.skill-row-description {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.skill-row-meta {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.skill-empty-hub {
+  grid-column: 1 / -1;
+  padding: 26px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+
+.skill-empty-hub h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.skill-empty-hub p {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.skill-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 22px;
+  border-radius: var(--radius);
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.skill-detail-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.skill-detail-head h2 {
+  margin: 3px 0 4px;
+  font-size: 18px;
+}
+
+.skill-detail-head p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.skill-version-picker {
+  margin-left: auto;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.skill-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 26px;
+  margin: 0;
+}
+
+.skill-facts dt {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.skill-facts dd {
+  margin: 2px 0 0;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skill-tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--shell-raised-strong);
+  color: var(--ink-soft);
+  font-size: 11px;
+}
+
+.skill-notes {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.skill-warnings {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--amber);
+  font-size: 12px;
+}
+
+.skill-section h3 {
+  margin: 0 0 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.skill-refs,
+.skill-files {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.skill-empty {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.skill-markdown {
+  font-size: 13px;
+}
+
+
+/* Destination rail ------------------------------------------------------- */
+
+/* Two places to be, always visible, never scrolled away with the list. The
+   skill hub used to be a button at the bottom of the chat list, which said it
+   was part of the chat list -- it is not: skills outlive every run in it. */
+.nav-rail {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 8px;
+  background: var(--shell);
+  border-right: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+}
+
+.nav-rail .brand-mark {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 14px;
+  font-size: 15px;
+}
+
+.nav-rail-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 2px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.nav-rail-item:hover {
+  background: var(--shell-raised-strong);
+  color: var(--ink);
+}
+
+.nav-rail-item--active {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.nav-rail-glyph {
+  font-size: 16px;
+  line-height: 1;
+}
+
+
+/* Squared off ------------------------------------------------------------- */
+
+/* The radius tokens carry most of this; what remains are the values written
+   before there were tokens. Grouped rather than edited in place so the change
+   reads as one decision and can be lifted out as one. */
+.auth-card,
+.modal,
+.playground,
+.settings-panel,
+.no-agent-art {
+  border-radius: var(--radius);
+}
+
+.agent-avatar,
+.agent-card,
+.bench-row,
+.brand-mark,
+.button,
+.chat-menu,
+.composer-attach,
+.composer-attachment,
+.crew,
+.empty-sidebar,
+.error-banner,
+.inspector-terminal,
+.party-card,
+.project-run-summary,
+.prompt-grid button,
+.run-result,
+.runtime-card,
+.send-button,
+.sidebar-actions .button,
+.step-detail,
+.stream-summary,
+.talk-content,
+.welcome-orbit div,
+.worker-avatar,
+.worker-card,
+.worker-row,
+.workspace-image,
+select,
+textarea,
+.auth-card input {
+  border-radius: var(--radius-sm);
+}
+
+.chat-menu-item,
+.composer-attachment .workspace-image,
+.config-banner > span,
+.coordination-message,
+.inspector-command,
+.label-action,
+.markdown-body code,
+.markdown-body pre,
+.orchestration-outcome,
+.orchestration-view,
+.project-menu-button,
+.project-new-chat,
+.sprite-fallback,
+.step-detail pre,
+.step-field pre,
+.step-line,
+.step-move {
+  border-radius: var(--radius-xs);
+}
+
+/* The operator's own message keeps its one asymmetric corner -- it is the only
+   thing on screen that is theirs -- just at the new scale. */
+.message-user .message-body {
+  border-radius: var(--radius-sm) 0 var(--radius-sm) var(--radius-sm);
+}
+
+.stream-steer {
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+}
+
+/* Labels, not lozenges. A capsule reads as a button you can press; these are
+   read-only facts about an agent or a run. */
+.orchestration-subtasks span,
+.role-pill,
+.role-tag,
+.run-status,
+.session-info,
+.skill-tag,
+.status,
+.stream-summary-role,
+.usage-badge,
+.worker-run-status {
+  border-radius: var(--radius-xs);
+}
+
+/* Game-like, where the game already is ------------------------------------ */
+
+/* A status light is a lit pixel, not a bead. Squaring it matches the sprites
+   it sits beside and reads more precisely at this size. */
+.status-dot,
+.state-dot {
+  border-radius: 0;
+  width: 6px;
+  height: 6px;
+}
+
+/* Creatures live in a frame with a real edge, the way a party member does on a
+   handheld. The border also gives the sprite a floor when it animates. */
+.agent-avatar,
+.worker-avatar,
+.crew,
+.sprite-fallback {
+  border: 1px solid var(--line);
+  background: var(--shell-raised);
+}
+
+/* A press that moves. One pixel is enough to feel mechanical rather than
+   animated, and it costs nothing on a surface that already has a hairline. */
+.button:active:not(:disabled),
+.send-button:active:not(:disabled),
+.nav-rail-item:active,
+.skill-row:active {
+  transform: translateY(1px);
+}
+
+
+/* The panel control never moves: its arrow tells the reader which way the
+   panel will travel, while its fixed position preserves the motor target. */
+.panel-control {
+  position: fixed;
+  top: 76px;
+  right: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-right: 0;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.panel-control:hover {
+  color: var(--accent-dark);
+  background: var(--accent-soft);
+}
+
+.panel-control:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Denser now that it is narrower: the same facts, less padding around them, so
+   the transcript keeps the width it earns. */
+.rail {
+  padding: 16px 14px 24px;
+}
+
+.rail-card {
+  padding: 12px;
+  gap: 10px;
+}
+
+.inspector,
+.inspector-head {
+  gap: 10px;
+}
+
+/* The mascot is decoration, and decoration gives up room first. */
+.rail-mascot img {
+  max-width: 120px;
+}
+
+
+/* The panel's top strip reserves the fixed control's space before the cards. */
+
+.rail-head {
+  display: flex;
+  margin-bottom: -4px;
+}
+
+/* The run is still going ------------------------------------------------- */
+
+.stream-running {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+
+/* A question the form stops asking ---------------------------------------- */
+
+.dialog-advanced > summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.dialog-advanced > summary:hover {
+  color: var(--ink);
+}
+
+.dialog-hint {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* Outlined, and every card its own colour ---------------------------------- */
+
+/* This version's character comes from outlines, not from white blocks floating
+   on a shadow. Cards get a real edge and a pale ground of their own, because a
+   column of identical white panels is exactly what made the rail read as a
+   dashboard rather than as a party. */
+.rail-card {
+  border: 1.5px solid var(--line);
+  background: var(--paper);
+  box-shadow: none;
+}
+
+.card--agent { background: var(--card-agent-bg); border-color: var(--card-agent-line); }
+.card--agent > .rail-card-title,
+.card--agent .rail-card-title { color: var(--card-agent-ink); }
+
+.card--moves { background: var(--card-moves-bg); border-color: var(--card-moves-line); }
+.card--moves .rail-card-title { color: var(--card-moves-ink); }
+
+.card--move { background: var(--card-move-bg); border-color: var(--card-move-line); }
+.card--move .rail-card-title { color: var(--card-move-ink); }
+
+.card--talk { background: var(--card-talk-bg); border-color: var(--card-talk-line); }
+.card--talk .rail-card-title { color: var(--card-talk-ink); }
+
+.card--files { background: var(--card-files-bg); border-color: var(--card-files-line); }
+.card--files .rail-card-title { color: var(--card-files-ink); }
+
+.card--phase { background: var(--card-phase-bg); border-color: var(--card-phase-line); }
+.card--phase .rail-card-title { color: var(--card-phase-ink); }
+
+/* Headings are the loudest thing on a card, so they carry its colour and its
+   letterspacing rather than sitting there as neutral grey. */
+.rail-card-title {
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+/* Panels and inputs get the same treatment: an edge instead of a shadow. */
+.playground,
+.settings-panel,
+.composer,
+.plan,
+.skill-detail,
+.auth-card,
+.modal,
+.runtime-card,
+.agent-card,
+.empty-sidebar,
+.project-run-summary {
+  border: 1.5px solid var(--line);
+  box-shadow: none;
+}
+
+/* Navigation sits on the tinted shell; the working area is the warm white. */
+.nav-rail {
+  background: var(--shell);
+  border-right: 1.5px solid var(--shell-line);
+}
+
+.nav-rail .brand-mark {
+  background: var(--paper);
+  border: 1.5px solid var(--shell-line);
+  box-shadow: none;
+  color: var(--accent-dark);
+}
+
+.nav-rail-item--active {
+  background: var(--shell-raised-strong);
+  border: 1.5px solid var(--accent-line);
+  color: var(--accent-dark);
+}
+
+.sidebar {
+  background: var(--shell);
+  border-right: 1.5px solid var(--shell-line);
+}
+
+/* Selected chat: the accent's one job in the list. */
+.agent-card.selected,
+.agent-card[aria-current="true"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+/* Primary is the accent; the destructive and interrupting ones say so in their
+   own colour instead of all three being grey ghosts. */
+.button-primary {
+  background: var(--accent);
+  border: 1.5px solid var(--accent-dark);
+  color: #10403c;
+}
+
+.button-primary:hover:not(:disabled) {
+  background: var(--accent-dark);
+  color: #ffffff;
+}
+
+.button-ghost {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+}
+
+.button-danger {
+  background: #fdf2f1;
+  border: 1.5px solid #f0c9c4;
+  color: #b8544a;
+}
+
+.send-button {
+  background: var(--accent);
+  border: 1.5px solid var(--accent-dark);
+  color: #10403c;
+}
+
+.send-button:disabled {
+  background: var(--shell-raised-strong);
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+/* Status and role chips: outlined, so they read as labels on a drawn interface
+   rather than as filled pills borrowed from a web app. */
+.status,
+.role-pill,
+.role-tag,
+.run-status,
+.skill-tag,
+.worker-run-status,
+.usage-badge,
+.session-info {
+  border: 1.2px solid transparent;
+}
+
+.status-ready { background: #e7f6ec; border-color: #bfe3ca; color: #2f7c50; }
+.status-busy { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-dark); }
+.status-stopped { background: var(--shell-raised-strong); border-color: var(--line); color: var(--ink-soft); }
+.status-error { background: #fdf0ee; border-color: #f2cdc7; color: #b8544a; }
+
+.role-pill { background: #fdf6e3; border-color: #ecdcb4; color: #9a7327; }
+.role-tag--running { background: #e7f6ec; border-color: #bfe3ca; color: #2f7c50; }
+.role-tag--idle { background: var(--shell-raised-strong); border-color: var(--line); color: var(--ink-soft); }
+
+.run-status--completed { background: #e7f6ec; border-color: #bfe3ca; }
+.run-status--running,
+.run-status--queued { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-dark); }
+.run-status--failed { background: #fdf0ee; border-color: #f2cdc7; }
+
+/* A quiet checkerboard in the corner of the rail, the way the reference sheet
+   fades its pixels out. Decoration only, and hidden from assistive tech by
+   virtue of being a background. */
+.rail-card.card--agent {
+  background-image:
+    linear-gradient(45deg, rgba(112, 200, 192, 0.16) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(112, 200, 192, 0.16) 25%, transparent 25%);
+  background-size: 8px 8px;
+  background-position: right -2px top -2px;
+  background-repeat: no-repeat;
+}
+
+/* The last of the old accent, and the one button that interrupts ------------ */
+
+/* The operator's own message was a hardcoded lilac from the previous palette,
+   which is now the only purple left on the screen. */
+.message-user .message-body {
+  background: var(--accent-soft);
+  color: #1d5f58;
+  border: 1.2px solid var(--accent-line);
+}
+
+/* Stop interrupts something that is happening. Settings and Delete are the
+   quiet one and the destructive one; this is neither, and grey said nothing. */
+.button-warn {
+  background: #fdf6e3;
+  border-color: #ebd9ad;
+  color: #8f6f22;
+}
+
+.button-warn:hover:not(:disabled) {
+  background: #f8ecd0;
+}
+
+
+
+/* Measured corrections against the reference ------------------------------- */
+/* Each block below closes one gap from ui_palette_gap_analysis.md. */
+
+/* GAP 1 — the two left columns do not share a colour. The chat list is warm
+   white; only the narrow nav rail is tinted, and barely. */
+.sidebar {
+  background: var(--shell);
+  border-right: 1.5px solid var(--edge);
+}
+
+.nav-rail {
+  background: var(--nav-shell);
+  border-right: 1.5px solid var(--edge);
+}
+
+/* GAP 2 — outlines. The reference draws an edge on nearly everything; measured,
+   its dark-ink area was more than double this build's. Everything that reads as
+   an object gets a real edge, not a hairline. */
+.rail-card,
+.playground,
+.settings-panel,
+.composer,
+.plan,
+.skill-detail,
+.auth-card,
+.modal,
+.runtime-card,
+.agent-card,
+.empty-sidebar,
+.project-run-summary,
+.bench-row,
+.party-card,
+.worker-card,
+.worker-row,
+.crew,
+.agent-avatar,
+.worker-avatar,
+.sprite-fallback,
+.prompt-grid button,
+.skill-row,
+.artifact-published-body,
+.inspector-terminal,
+textarea,
+select,
+input {
+  border: 1.5px solid var(--edge);
+}
+
+/* The creature's frame is the one edge that should be unmistakable -- it is a
+   character portrait, not a table cell. */
+.agent-avatar,
+.worker-avatar,
+.crew {
+  border-color: var(--edge-strong);
+}
+
+/* GAP 3 — the nav rail's colour comes from the elements on it, not from its
+   ground. Measured: 22% of that column is teal in the reference, 5% here. */
+.nav-rail .brand-mark {
+  background: var(--paper);
+  border: 1.5px solid var(--edge-strong);
+  border-radius: var(--radius-sm);
+  color: var(--accent-dark);
+  box-shadow: none;
+}
+
+.nav-rail-item {
+  color: var(--accent-dark);
+  border: 1.5px solid transparent;
+}
+
+.nav-rail-item .nav-rail-glyph {
+  color: var(--accent-dark);
+}
+
+.nav-rail-item--active {
+  background: #d3efe8;
+  border-color: var(--accent);
+  color: #1d5f58;
+}
+
+/* GAP 4 — the working area is a white page. The operator's message had become
+   the largest block of colour in it; the reference keeps teal there for the
+   status dot, inline code and the send button only. */
+.message-user .message-body {
+  background: #f4fbf9;
+  border-color: #d8ebe7;
+  color: #29565f;
+}
+
+/* GAP 5 — one pale ground for every card, so no single colour dominates the
+   rail. Identity comes from the outline and the heading, not from how dark the
+   fill is. Mission phase was carrying 18% of the column on its own. */
+.card--agent { background: #f5faf5; }
+.card--moves { background: #f3f8fc; }
+.card--move { background: #fdf5f5; }
+.card--talk { background: #f8f5fc; }
+.card--files { background: #f4f9fb; }
+.card--phase { background: #fcf9f2; }
+
+/* Pixel decoration ---------------------------------------------------------- */
+
+/* Decoration goes in the gaps the layout already leaves, and nowhere else.
+   First attempt put the clouds in a fixed box at the top right, where they sat
+   on top of the panel toggle, and hung the castle off the end of the rail's
+   content -- so on a short rail it floated in the middle with empty space
+   below it. Both now attach to space that is actually spare. */
+
+/* The rail's top strip reserves the viewport control, while its clouds stay
+   in the open half of that reserved row. */
+.rail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+  min-height: 82px;
+}
+
+.rail-head::after {
+  content: "";
+  width: 118px;
+  height: 34px;
+  background: url("/decor/clouds.png") no-repeat right center / contain;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* The castle sits on the floor of the rail. `margin-top: auto` in a column is
+   what puts it there whatever the rail happens to contain -- pinned to the
+   bottom when the cards are short, pushed along after them when they are not. */
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rail::after {
+  content: "";
+  display: block;
+  margin: 24px -14px -24px auto;
+  width: 100%;
+  height: 128px;
+  background: url("/decor/castle.png") no-repeat right bottom / auto 128px;
+  pointer-events: none;
+  margin-top: auto;
+  flex: none;
+}
+
+/* The rail already ends in a mascot; the castle replaces it rather than
+   stacking two decorations on top of each other. */
+.rail-mascot {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rail-head::after {
+    animation: drift 90s ease-in-out infinite;
+  }
+}
+
+@keyframes drift {
+  from { transform: translateX(0); }
+  50% { transform: translateX(-14px); }
+  to { transform: translateX(0); }
+}
+
+
+/* Reference-board polish -------------------------------------------------- */
+
+/* The reference is a warm illustrated workbench, with teal used for controls
+   and outlines rather than as a large wash behind the conversation. */
+.main {
+  background:
+    linear-gradient(rgba(255, 252, 245, 0.84), rgba(255, 252, 245, 0.84)),
+    repeating-linear-gradient(0deg, transparent 0 23px, rgba(99, 159, 151, 0.035) 23px 24px),
+    #f4efe5;
+}
+
+.agent-header {
+  margin-bottom: 14px;
+}
+
+.playground {
+  position: relative;
+  border-color: #d8caa9;
+  background: #fffdf8;
+}
+
+.playground-topbar {
+  min-height: 72px;
+  border-bottom-color: #eadfc8;
+  background: #fffaf0;
+}
+
+.playground-status {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.usage-badge,
+.session-info {
+  border-color: #c9dcd6;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.messages {
+  padding-top: 24px;
+  padding-bottom: 22px;
+  background: #fffdf8;
+  scrollbar-color: #b8d8d2 transparent;
+}
+
+.message {
+  margin-bottom: 20px;
+}
+
+.message-meta {
+  margin-bottom: 6px;
+}
+
+.message-meta strong {
+  color: #25454a;
+}
+
+.message-user {
+  margin-left: 16%;
+}
+
+.message-user .message-body {
+  padding: 10px 12px;
+  border: 1.5px solid #bad7d1;
+  border-left: 3px solid var(--accent);
+  background: #f5fbf7;
+  color: #294d51;
+  box-shadow: 2px 2px 0 #edf3e9;
+}
+
+.message-assistant .message-body {
+  padding-left: 13px;
+  border-left: 2px solid #8fc9bf;
+  color: #343d3e;
+}
+
+.markdown-body code {
+  border-color: #b8d8d2;
+  background: #e8f7f2;
+  color: #225e58;
+}
+
+.markdown-body pre,
+.step-detail,
+.run-result {
+  border-color: #ded5c3;
+  background: #fbf8f1;
+}
+
+.stream-summary {
+  border: 1px solid transparent;
+}
+
+.stream-summary:hover {
+  border-color: #d7e5df;
+  background: #f5faf6;
+}
+
+.run-header {
+  border-top-color: #e4dac5;
+}
+
+/* The composer is a small framed console inside the page, not a solid footer
+   band. Its warmer border separates input from the teal transcript accents. */
+.composer {
+  position: relative;
+  margin: 0 10px 10px;
+  padding-top: 11px;
+  padding-bottom: 12px;
+  border: 1.5px solid #d9c8a3;
+  background: #fffaf0;
+}
+
+.composer:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(112, 200, 192, 0.13);
+}
+
+.composer textarea::placeholder {
+  color: #8f918c;
+}
+
+.composer-attach {
+  border-color: #dabdc0;
+  background: #fff5f2;
+  color: #bd6069;
+}
+
+.send-button {
+  box-shadow: 2px 2px 0 #a9cfc8;
+}
+
+/* Small mechanical labels make the header controls read like the reference's
+   compact utility widgets without adding decorative emoji to the markup. */
+.header-actions .button::before {
+  display: inline-grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.header-actions .button-ghost:not(.button-warn)::before { content: "⚙"; }
+.header-actions .button-warn::before { content: "■"; }
+.header-actions .button-danger::before { content: "×"; font-size: 15px; }
+
+/* Peach checker pixels in the two quiet corners echo the game-board framing
+   while staying outside selectable transcript content. */
+.playground::before,
+.playground::after,
+.composer::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
+  opacity: 0.34;
+  background:
+    conic-gradient(from 90deg at 50% 50%, #e9c58e 25%, transparent 0 50%, #e9c58e 0 75%, transparent 0)
+    0 0 / 10px 10px;
+  -webkit-mask-image: linear-gradient(135deg, #000, transparent 74%);
+  mask-image: linear-gradient(135deg, #000, transparent 74%);
+}
+
+.playground::before {
+  top: 76px;
+  right: 0;
+  transform: rotate(90deg);
+}
+
+.playground::after {
+  right: 0;
+  bottom: 104px;
+  transform: rotate(180deg);
+}
+
+.composer::after {
+  right: -1px;
+  bottom: -1px;
+  width: 22px;
+  height: 22px;
+  transform: rotate(180deg);
+}
+
+/* A cropped piece of the castle landscape supplies the tiny foliage at the
+   bottom of the destination strip seen in the reference. */
+.nav-rail::after {
+  content: "";
+  width: calc(100% + 16px);
+  height: 72px;
+  margin: auto -8px -20px;
+  flex: none;
+  background: url("/decor/castle.png") no-repeat left bottom / auto 92px;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+@media (max-width: 680px) {
+  .nav-rail::after {
+    display: none;
+  }
+
+  .composer {
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+
+  .message-user {
+    margin-left: 7%;
+  }
+}
+
+/* The compact sidebar is deliberately icon-only. Later desktop card rules used
+   to restore their labels after the original breakpoint, leaving clipped words
+   between 681px and 900px. This final override owns that responsive state. */
+@media (min-width: 681px) and (max-width: 900px) {
+  .sidebar .brand > div,
+  .sidebar-label,
+  .sidebar .agent-card-copy,
+  .sidebar .party-heading,
+  .sidebar .party-card-copy,
+  .sidebar .party-move,
+  .sidebar .bench-row-name,
+  .sidebar .role-tag,
+  .sidebar .runtime-card,
+  .sidebar .project-toggle strong,
+  .sidebar .empty-project-chats {
+    display: none;
+  }
+
+  .sidebar .create-button,
+  .sidebar .sidebar-secondary {
+    min-width: 0;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .sidebar .create-button span {
+    font-size: 22px;
+  }
+
+  .sidebar .sidebar-secondary::before {
+    content: "+";
+    font-size: 18px;
+  }
+
+  .sidebar .project-heading {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    padding-right: 0;
+  }
+
+  .sidebar .project-toggle {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+
+  .sidebar .project-new-chat,
+  .sidebar .project-menu-button {
+    width: 100%;
+    height: 26px;
+  }
+
+  .sidebar .project-chats,
+  .sidebar .party {
+    padding-left: 0;
+  }
+
+  .sidebar .worker-toggle {
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+    border-left: 0;
+    padding: 2px;
+    font-size: 0;
+  }
+
+  .sidebar .worker-toggle span {
+    width: auto;
+    font-size: 11px;
+  }
+
+  .sidebar .bench-row,
+  .sidebar .party-card {
+    justify-content: center;
+    padding: 5px;
+  }
+}
+
+/* Transcript scope ------------------------------------------------------- */
+
+/* A leader's transcript is the whole session by default -- the mission is what
+   happened. This narrows it to the leader's own run, for missions with enough
+   workers that what the leader decided is hard to pick out of the interleaving.
+   It is a view, so it sits with the transcript and changes nothing the run
+   footer reports about the mission. */
+.transcript-scope {
+  /* `fit-content` rather than `align-self`: the transcript is a block
+     container, where align-self does nothing, so the frame stretched the full
+     width of the column and read as an empty input rather than two buttons. */
+  width: fit-content;
+  display: flex;
+  gap: 0;
+  margin: 0 0 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.scope-option {
+  border: 0;
+  background: none;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.scope-option + .scope-option {
+  border-left: 1px solid var(--line);
+}
+
+.scope-option:hover {
+  background: var(--shell-raised-strong);
+  color: var(--ink);
+}
+
+.scope-option.selected {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+/* A move that has finished is dimmed, so "what it is doing" and "what it just
+   did" never look like the same claim. Showing a dash instead read as the agent
+   having stopped, which was wrong every time it was only between tool calls. */
+.party-move--settled,
+.worker-row-move--settled {
+  opacity: 0.55;
+  font-style: italic;
+}
+
+/* A different animal moves differently ------------------------------------- */
+
+/* One shared idle loop made sixteen creatures read as one creature in sixteen
+   colours. Identity is the whole reason this cast exists, so each one gets its
+   own resting motion. Resting is three states, not one: `idle` is only ever
+   true before an agent's first run, so binding these to it alone meant nobody
+   ever saw them -- a finished party sat frozen and identical. Everything here
+   is slow on purpose: these should be noticed out of the corner of an eye, not
+   watched -- but they are drawn at 22-34px, where a 2deg rotation is half a
+   pixel and reads as a still image. Amplitude is sized for that box, not for
+   the 78px card. `data-creature` was already on the element, so this is CSS
+   only.
+
+   The pairs are chosen from how the animal actually carries itself: the rabbit
+   hops, the penguin waddles, the owl turns its head, the sloth barely moves. */
+
+.sprite[data-creature="rabbit"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-hop; animation-duration: 3.2s; }
+.sprite[data-creature="penguin"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-waddle; animation-duration: 3.6s; }
+.sprite[data-creature="owl"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-headturn; animation-duration: 5.2s; }
+.sprite[data-creature="sloth"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-drowse; animation-duration: 8s; }
+.sprite[data-creature="cat"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-stretch; animation-duration: 5.4s; }
+.sprite[data-creature="squirrel"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-skitter; animation-duration: 2.8s; }
+.sprite[data-creature="hamster"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-skitter; animation-duration: 2.4s; }
+.sprite[data-creature="shiba"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-wag; animation-duration: 2.6s; }
+.sprite[data-creature="fox"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-alert; animation-duration: 4.2s; }
+.sprite[data-creature="raccoon"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-peer; animation-duration: 4.6s; }
+.sprite[data-creature="hedgehog"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-curl; animation-duration: 4.8s; }
+.sprite[data-creature="beaver"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-tailslap; animation-duration: 3.8s; }
+.sprite[data-creature="otter"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-float; animation-duration: 5s; }
+.sprite[data-creature="panda"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-sway; animation-duration: 6.4s; }
+.sprite[data-creature="koala"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-sway; animation-duration: 7s; }
+.sprite[data-creature="bear"]:is(.sprite--idle, .sprite--waiting, .sprite--done)
+  .sprite-art img { animation-name: creature-lumber; animation-duration: 5.6s; }
+
+/* The rabbit leaves the ground and squashes on landing; nothing else here does. */
+@keyframes creature-hop {
+  0%, 52%, 100% { transform: translateY(0) scale(1); }
+  58% { transform: translateY(2%) scaleX(1.09) scaleY(0.91); }
+  70% { transform: translateY(-26%) scaleX(0.93) scaleY(1.09); }
+  82% { transform: translateY(0) scaleX(1.07) scaleY(0.93); }
+  90% { transform: translateY(0) scale(1); }
+}
+
+/* Weight shifting foot to foot, tipping rather than sliding. */
+@keyframes creature-waddle {
+  0%, 100% { transform: rotate(0deg) translateX(0) translateY(0); }
+  25% { transform: rotate(-10deg) translateX(-8%) translateY(-3%); }
+  50% { transform: rotate(0deg) translateX(0) translateY(0); }
+  75% { transform: rotate(10deg) translateX(8%) translateY(-3%); }
+}
+
+/* The head goes further than a body could, holds, and comes back. */
+@keyframes creature-headturn {
+  0%, 16%, 100% { transform: rotate(0deg) translateX(0) scaleX(1); }
+  30%, 42% { transform: rotate(-6deg) translateX(-14%) scaleX(0.8); }
+  58%, 70% { transform: rotate(6deg) translateX(14%) scaleX(0.8); }
+  86% { transform: rotate(0deg) translateX(0) scaleX(1); }
+}
+
+/* Barely anything, very slowly, with one slow blinkish sink. Still the
+   smallest gesture in the cast -- but a gesture, not a rounding error. */
+@keyframes creature-drowse {
+  0%, 100% { transform: translateY(0) rotate(0deg) scaleY(1); }
+  40% { transform: translateY(7%) rotate(-3.5deg) scaleY(0.93); }
+  70% { transform: translateY(2.5%) rotate(2deg) scaleY(0.975); }
+}
+
+/* A long lazy extension, then a settle. */
+@keyframes creature-stretch {
+  0%, 44%, 100% { transform: translateY(0) scaleX(1) scaleY(1); }
+  58% { transform: translateY(-3%) scaleX(1.1) scaleY(0.93); }
+  70% { transform: translateY(-5%) scaleX(0.94) scaleY(1.08); }
+  84% { transform: translateY(0) scaleX(1.03) scaleY(0.97); }
+}
+
+/* Small fast bursts with sudden stillness between them. */
+@keyframes creature-skitter {
+  0%, 30%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+  36% { transform: translateX(-4%) translateY(-4%) rotate(-3deg); }
+  44% { transform: translateX(4%) translateY(0) rotate(3deg); }
+  52% { transform: translateX(-3%) translateY(-3%) rotate(-2deg); }
+  60% { transform: translateX(0) translateY(0) rotate(0deg); }
+}
+
+/* Back half swinging while the front stays put. */
+@keyframes creature-wag {
+  0%, 100% { transform: rotate(0deg) skewX(0deg); }
+  25% { transform: rotate(-6deg) skewX(8deg); }
+  50% { transform: rotate(0deg) skewX(0deg); }
+  75% { transform: rotate(6deg) skewX(-8deg); }
+}
+
+/* Ears up, freeze, check the other way. */
+@keyframes creature-alert {
+  0%, 20%, 100% { transform: translateY(0) rotate(0deg) scaleY(1); }
+  28% { transform: translateY(-6%) rotate(0deg) scaleY(1.05); }
+  40%, 52% { transform: translateY(-4%) rotate(-5deg) scaleY(1.03); }
+  64%, 76% { transform: translateY(-4%) rotate(5deg) scaleY(1.03); }
+  88% { transform: translateY(0) rotate(0deg) scaleY(1); }
+}
+
+/* Leaning in to look at something, then thinking better of it. */
+@keyframes creature-peer {
+  0%, 24%, 100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  42% { transform: translateY(-3%) translateX(6%) rotate(7deg) scale(1.04); }
+  58% { transform: translateY(-3%) translateX(6%) rotate(5deg) scale(1.04); }
+  76% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+}
+
+/* Half a curl into a ball and back out again. */
+@keyframes creature-curl {
+  0%, 30%, 100% { transform: translateY(0) scale(1); }
+  48% { transform: translateY(4%) scale(0.9); }
+  62% { transform: translateY(4%) scale(0.9); }
+  80% { transform: translateY(-2%) scale(1.03); }
+}
+
+/* Rear lifts and comes down flat. */
+@keyframes creature-tailslap {
+  0%, 46%, 100% { transform: translateY(0) rotate(0deg) scaleY(1); }
+  60% { transform: translateY(-8%) rotate(-7deg) scaleY(1.04); }
+  72% { transform: translateY(1%) rotate(3deg) scaleX(1.06) scaleY(0.94); }
+  84% { transform: translateY(0) rotate(0deg) scale(1); }
+}
+
+/* Lying on the water, rocking with it. */
+@keyframes creature-float {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  35% { transform: translateY(-8%) rotate(6deg); }
+  70% { transform: translateY(-3%) rotate(-3.5deg); }
+}
+
+/* Slow weight transfer, no feet leaving the ground. */
+@keyframes creature-sway {
+  0%, 100% { transform: rotate(-6deg) translateX(-5%) scaleY(0.98); }
+  50% { transform: rotate(6deg) translateX(5%) scaleY(0.98); }
+}
+
+/* Heavy, with the whole body dropping into each step. */
+@keyframes creature-lumber {
+  0%, 100% { transform: translateY(0) rotate(0deg) scaleY(1); }
+  22% { transform: translateY(-4%) rotate(-2deg) scaleY(1.03); }
+  44% { transform: translateY(1%) rotate(0deg) scaleX(1.05) scaleY(0.95); }
+  68% { transform: translateY(-4%) rotate(2deg) scaleY(1.03); }
+  88% { transform: translateY(1%) rotate(0deg) scaleX(1.04) scaleY(0.96); }
+}

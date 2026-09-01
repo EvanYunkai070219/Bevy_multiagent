@@ -1,0 +1,29 @@
+node_modules/
+dist/
+.env
+.env.production
+.data/
+.local/
+data/
+apps/server/.cache
+# Dependency cache the container runtime writes at the repo root.
+.cache/
+workspaces/
+codex-home/
+coverage/
+*.log
+*.tsbuildinfo
+.DS_Store
+deploy/volcengine/.terraform/
+deploy/volcengine/*.tfstate*
+deploy/volcengine/terraform.tfvars
+
+# 本地私有笔记，不进仓库
+*.local.md
+
+# Superpowers 本地设计、计划与执行记录，不进仓库
+docs/superpowers/
+.superpowers/
+
+# Linked git worktrees
+.worktrees/

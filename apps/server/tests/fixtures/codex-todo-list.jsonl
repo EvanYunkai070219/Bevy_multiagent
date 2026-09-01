@@ -1,0 +1,5 @@
+{"type": "thread.started", "thread_id": "01a03000-todo-fixture"}
+{"type": "item.started", "item": {"id": "item_19", "type": "todo_list", "items": [{"text": "Initialize skill folder via init_skill.py", "completed": false}, {"text": "Write SKILL.md body from provided content", "completed": false}, {"text": "Validate skill with quick_validate.py", "completed": false}]}}
+{"type": "item.updated", "item": {"id": "item_19", "type": "todo_list", "items": [{"text": "Initialize skill folder via init_skill.py", "completed": true}, {"text": "Write SKILL.md body from provided content", "completed": true}, {"text": "Validate skill with quick_validate.py", "completed": true}]}}
+{"type": "item.completed", "item": {"id": "item_19", "type": "todo_list", "items": [{"text": "Initialize skill folder via init_skill.py", "completed": true}, {"text": "Write SKILL.md body from provided content", "completed": true}, {"text": "Validate skill with quick_validate.py", "completed": true}]}}
+{"type": "turn.completed", "usage": {"input_tokens": 100, "output_tokens": 10}}

@@ -1,0 +1,24 @@
+# CodeJam — Agent Launchpad 开发环境
+#
+# 这个 conda 环境只负责一件事：把 Node 版本钉死在 22。
+# 仓库 package.json 要求 node>=22 / npm>=10，而很多人 nvm 默认还是 20，
+# 装依赖时不会报错、但跑起来会在奇怪的地方炸。
+#
+# 用法：
+#   conda env create -f environment.yml
+#   conda activate codejam
+#   npm install
+#
+# 更新（environment.yml 改动后）：
+#   conda env update -f environment.yml --prune
+#
+# 注意：npm 依赖不放这里，由 package-lock.json 锁定。
+#      容器引擎（Colima/Docker）也不放这里，见 SETUP.md。
+
+name: codejam
+
+channels:
+  - conda-forge
+
+dependencies:
+  - nodejs=22.23.2
