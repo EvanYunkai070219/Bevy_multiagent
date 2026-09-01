@@ -123,14 +123,7 @@ the scheduler runs each dependency layer as a parallel wave.
   recomputed from disk rather than held in memory.
 - **One budget** covers the leader and every worker.
 
-This is deliberately **workload identity**, not a claim of full end-user
-identity. The remote-demo bearer token protects the API surface, but it does
-not model User A and User B. Inside a run, the control plane registers the whole
-team, derives each sender from its token rather than request content, permits
-only the leader to dispatch workers, and removes the tokens' authority when the
-team closes. The narrow scope is useful: a worker can be attributed and
-contained without receiving the human's provider credential or becoming a
-long-lived principal.
+**Agent identity is issued and enforced by the middleware.** Every team member is registered before execution and receives a run-scoped token. The coordination ingress derives the sender from that token—ignoring any caller-supplied from field—and only the leader token may dispatch workers. The same run scope attributes model calls through the proxy, while the provider credential remains in the control plane. When the team closes, its tokens lose authority.
 
 ### Capability — across runs
 
