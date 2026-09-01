@@ -84,9 +84,54 @@ detect_engine() {
   return 1
 }
 
+# The README tells you to put your key in `.env`, so read it. Anything already
+# exported wins, which keeps `ARK_MODEL=other npm run poc` working as an override.
+env_file="${LOCAL_POC_ENV_FILE:-$repo_dir/.env}"
+if [[ -f "$env_file" ]]; then
+  loaded_keys=0
+  while IFS= read -r raw_line || [[ -n "$raw_line" ]]; do
+    line="${raw_line%$'\r'}"
+    line="${line#"${line%%[![:space:]]*}"}"
+    if [[ -z "$line" || "$line" == '#'* ]]; then
+      continue
+    fi
+    line="${line#export }"
+    if [[ "$line" != *=* ]]; then
+      continue
+    fi
+    key="${line%%=*}"
+    key="${key%"${key##*[![:space:]]}"}"
+    if ! [[ "$key" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]]; then
+      continue
+    fi
+    if [[ -n "${!key:-}" ]]; then
+      continue
+    fi
+    value="${line#*=}"
+    value="${value#"${value%%[![:space:]]*}"}"
+    if [[ ${#value} -ge 2 && "$value" == '"'*'"' ]]; then
+      value="${value:1:${#value}-2}"
+    elif [[ ${#value} -ge 2 && "$value" == "'"*"'" ]]; then
+      value="${value:1:${#value}-2}"
+    else
+      value="${value%"${value##*[![:space:]]}"}"
+    fi
+    export "$key=$value"
+    loaded_keys=$((loaded_keys + 1))
+  done < "$env_file"
+  log "Loaded $loaded_keys variables from $(basename "$env_file")."
+fi
+
+if [[ "${ARK_API_KEY:-}" == replace-with-your-* ]]; then
+  log "ARK_API_KEY is still the placeholder from .env.example."
+  log "Put your real provider key in .env before starting."
+  exit 2
+fi
+
 if [[ -z "${ARK_API_KEY:-}" || -z "${ARK_MODEL:-}" ]]; then
   log "ARK_API_KEY and ARK_MODEL are required."
-  log "Example: ARK_API_KEY=key ARK_MODEL=ep-id ./scripts/start-local-poc.sh"
+  log "Put them in .env (cp .env.example .env), or pass them inline:"
+  log "  ARK_API_KEY=key ARK_MODEL=ep-id ./scripts/start-local-poc.sh"
   exit 2
 fi
 

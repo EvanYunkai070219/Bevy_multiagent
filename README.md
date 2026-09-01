@@ -275,7 +275,7 @@ npm test -w @launchpad/server -- coordination     # just the coordination suites
 npm test -w @launchpad/web                        # the interface, ~5 seconds
 ```
 
-**131 test files: 93 on the server, 38 on the web.** The server suite is 1603
+**130 test files: 92 on the server, 38 on the web.** The server suite is 1603
 tests and takes about eleven minutes — it runs single-threaded on purpose,
 because several suites create and verify real git repositories and contend for
 the disk otherwise. The web suite is 383 tests in about five seconds.
