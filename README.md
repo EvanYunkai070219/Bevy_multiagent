@@ -123,6 +123,15 @@ the scheduler runs each dependency layer as a parallel wave.
   recomputed from disk rather than held in memory.
 - **One budget** covers the leader and every worker.
 
+This is deliberately **workload identity**, not a claim of full end-user
+identity. The remote-demo bearer token protects the API surface, but it does
+not model User A and User B. Inside a run, the control plane registers the whole
+team, derives each sender from its token rather than request content, permits
+only the leader to dispatch workers, and removes the tokens' authority when the
+team closes. The narrow scope is useful: a worker can be attributed and
+contained without receiving the human's provider credential or becoming a
+long-lived principal.
+
 ### Capability — across runs
 
 An agent that solved something once can write it up as a skill, have it
@@ -241,11 +250,18 @@ Every case below is enforced in code and leaves evidence a human can read.
 | Impersonation, out-of-run recipient, path escape, dispatch without the leader token | Refused | Rejection at the ingress | `coordination-ingress` · *takes the sender from the token, never from the request*, *refuses a recipient outside this leader run*, *refuses a workspace ref that climbs out of the shared directory*, *allows only the leader token to dispatch subagents* |
 | Crash mid-delivery | Pending set rebuilt from the journal | The journal itself | `coordination-team-journal` · *reports a queued message with no receipt as pending after reload*; `coordination-delivery` · *recomputes what still needs delivering from the journal, not memory* |
 | A worker stops making progress | Runtime cancelled, attempt ended | Fault record with the evidence behind it | `orchestration-trajectory` · *warns on the second identical checkpoint and stops on the third*, *expands one batch_tool_call into nested steps so batching cannot hide a loop*; `orchestration-fault-detector` · *classifies a trajectory stop as a repairable stall* |
+| A worker leaves a dirty contribution, or two contributions conflict | Refused; the attempt remains inspectable and the prior canonical head stays authoritative | Contribution and integration records | `contribution-collector` · *accepts exactly one clean child commit*; `contribution-integrator` · *aborts a conflict without advancing the canonical head* |
+| The server restarts during Project publication | Interrupted agents are not restarted; durable publication intent is reconciled against the last authoritative baseline | Run, integration and publication records | `agent-service` · *recovers interrupted attempts without resuming execution*, *finalizes a leftover baseline transition without rerunning an agent*; `project-registry` · *recovers a persisted ref update on restart* |
 | A secret reaches a write path | Masked before it lands, not cleaned up afterwards | The stored trace itself | `redact` · *removes the literal secret anywhere in a string*, *masks secret-named keys and walks nested structures*, *does not let source text spoof a truncation marker* |
 | An invalid plan | Refused before any worker starts | The rejection, naming the offending subtask | `orchestration-validation` · *throws on a cycle*, *throws on a self-dependency*, *throws on a dependency to an unknown subtask*, *throws on duplicate worker agent names* |
 
 The loop detector deliberately only downgrades and reports. Intervening
 automatically is itself a model turn, and can deepen the loop it meant to break.
+
+The recovery rule is the same in each case: restore a middleware-owned durable
+invariant, not an agent's guess about what probably happened. Delivery is
+reconstructed from the journal, Git recovery returns to an authoritative head,
+and ambiguous state remains visible instead of being silently labelled success.
 
 ---
 
@@ -278,6 +294,63 @@ the same holds for the ordinary path:
 | The scheduler waits on dependencies | `orchestration-runtime-lifetime` · *queues live leader workers until their dependsOn subtasks finish* |
 | The skill router declines rather than guesses | `orchestration-skill-router` · *does not install for low-confidence tasks*, *rejects a skill with blocking provenance warnings despite a strong match* |
 | Worker tokens die with the team | `orchestration-runtime-lifetime` · *keeps worker model tokens valid until the team closes* |
+
+## Experimental bounded self-healing
+
+The repository also contains a bounded recovery path, but it is **disabled by
+default and is not part of the production claim above**. On one repairable
+coding fault, the middleware freezes a Git checkpoint and its evidence, permits
+one diagnosis, and runs exactly one three-way tournament: `control`,
+`context_patch`, and `strategy_patch`. Each candidate works in an isolated
+worktree. A verifier outside candidate control runs protected gates and mutants;
+candidate-authored tests are supplementary evidence only. Insufficient evidence
+or an exact tie returns to the control candidate, and any authority,
+verification, integration, deadline or cancellation failure stops closed.
+
+The cross-run portion records a Project-scoped, hash-chained lineage of what was
+tried. It may prune only a fully identical, audited negative; an analogous
+failure can contribute at most three advisory cues, while contradictory,
+corrupt or incomplete history is quarantined and the ordinary bounded
+tournament runs unchanged. Restart reconciliation is passive: it replays
+durable history outboxes but never reruns a model, worker, verifier or Git
+mutation.
+
+### What worked, what did not
+
+The useful result was the authority model: candidate execution, verification,
+promotion and history are separate records, with deterministic limits and a
+recoverable Git head. Integration also exposed why that machinery should not
+sit inside the reliable coordination loop. Ambiguous leader/worker commit
+ownership produced dirty worktrees and overlapping contributions; Git then
+correctly rejected the resulting conflicts. A separate durability race allowed
+long worker traces to be validated before queued events had flushed. Those were
+coordination-boundary failures, not evidence that a more aggressive repair
+model was needed.
+
+Two self-healing blockers remain: the planner is not yet given the contract
+catalogue it is expected to declare against, and one trusted-history case causes
+the exact-repeat pruning index to quarantine itself. More broadly, healing and
+evolution still share too much startup and orchestration lifecycle with normal
+runs. Until those boundaries are separated and the blockers are closed, the
+feature stays behind `ORCHESTRATION_HEALING_ENABLED=false`.
+
+### Next design direction
+
+The intended evolution path is an outer loop around a frozen multi-agent core:
+the core produces an authoritative result and append-only execution facts; an
+asynchronous observer mines those facts; isolated shadow tournaments compare a
+candidate with a frozen baseline; and a separate verifier produces evidence for
+manual promotion. A promoted, immutable harness version may be selected only
+when the **next** run is admitted. Evolution startup, storage or evaluation
+failure must never delay or change an active run. Bounded healing can later
+return as an outer retry supervisor rather than live mutation of a worker DAG.
+
+That design keeps three histories distinct: ordinary execution, harness
+evolution, and verifier evolution. A future verifier may evolve only from
+versioned mismatches against an immutable oracle, in shadow mode, with its own
+regression evidence, approval and rollback. The harness and the verifier judging
+it are never changed in the same experiment, so the system cannot improve its
+score merely by weakening its judge.
 
 ## Where to look in the code
 
